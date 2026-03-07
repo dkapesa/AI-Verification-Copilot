@@ -91,8 +91,3 @@ flowchart TD
     J -.-> G
     K[Future Agent Orchestration] -.-> J
     K -.-> G
-watchlist screening
-
-rules-based risk scoring
-
-The goal is to persist structured tool outputs in the database and prepare the system for agent-based orchestration in the next phase.
