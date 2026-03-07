@@ -45,13 +45,6 @@ The goal is to build a realistic internal system that:
 - enables human review and override
 - can later be evaluated on synthetic case datasets
 
-This makes the project relevant for roles across:
-- Backend Engineering
-- Applied AI / ML Engineering
-- Product Engineering
-- LLM Systems Engineering
-- Trust & Safety / decisioning platform work
-
 ---
 
 ## Core Features Implemented
@@ -98,3 +91,231 @@ flowchart TD
     J -.-> G
     K[Future Agent Orchestration] -.-> J
     K -.-> G
+
+Backend Architecture
+
+The current backend is designed using a layered architecture so that each part of the system remains independently understandable, testable, and extensible.
+
+API Layer
+
+FastAPI provides the HTTP interface and automatic OpenAPI documentation.
+
+Schema Layer
+
+Pydantic models define request validation and response serialization.
+
+CRUD Layer
+
+Database access is separated into CRUD functions to keep route handlers thin and maintainable.
+
+Persistence Layer
+
+SQLAlchemy ORM maps Python models to PostgreSQL tables.
+
+Migration Layer
+
+Alembic manages database schema evolution through version-controlled migrations.
+
+Audit Layer
+
+Audit events are written to audit_logs to capture backend actions, metadata, and latency.
+
+Data Model
+cases
+
+Represents a verification case under review.
+
+Fields include:
+
+id (UUID)
+
+user_id
+
+email
+
+device_info (JSONB)
+
+document_check_result (JSONB)
+
+behaviour_summary (JSONB)
+
+status (PENDING, REVIEWED, ESCALATED)
+
+created_at
+
+updated_at
+
+audit_logs
+
+Stores backend and workflow events for observability and traceability.
+
+Fields include:
+
+id (UUID)
+
+case_id (nullable)
+
+event_type
+
+actor_type
+
+subject
+
+latency_ms
+
+metadata (JSONB)
+
+created_at
+
+Tech Stack
+Backend
+
+Python
+
+FastAPI
+
+Pydantic / pydantic-settings
+
+SQLAlchemy
+
+Alembic
+
+Uvicorn
+
+Database
+
+PostgreSQL
+
+Docker / Docker Compose
+
+Frontend (planned)
+
+Next.js
+
+TypeScript
+
+Tailwind
+
+AI / Orchestration (planned)
+
+LangGraph
+
+OpenAI API
+
+optional Ollama fallback
+
+Local Development
+Prerequisites
+
+Python 3.11+
+
+Node.js 18+
+
+Docker Desktop
+
+Git
+
+VS Code recommended
+
+Roadmap
+1) Repo setup + dev workflow
+
+ Monorepo structure
+
+ Backend, frontend, and database runnable locally
+
+2) Backend foundation
+
+ FastAPI backend
+
+ PostgreSQL persistence
+
+ SQLAlchemy models
+
+ Alembic migrations
+
+ Audit logging
+
+ Pagination and 404 handling
+
+3) Tooling layer
+
+ Shared tool output schema
+
+ tool_runs persistence model
+
+ Deterministic fraud checks
+
+ Tool registry
+
+ Parallel tool execution
+
+4) Agent orchestration
+
+ LangGraph workflow
+
+ Structured AI review output
+
+ Decision persistence
+
+ Retry on invalid structured output
+
+5) Frontend dashboard
+
+ Case list view
+
+ Case detail view
+
+ Tool outputs
+
+ AI review panel
+
+ Audit timeline
+
+6) Evaluation harness
+
+ Synthetic dataset
+
+ Expected labels
+
+ Decision metrics
+
+ Latency and coverage metrics
+
+7) Production polish
+
+ Full Docker Compose stack
+
+ .env.example
+
+ Logging improvements
+
+ Better developer onboarding
+
+8) Deployment + portfolio packaging
+
+ Hosted backend
+
+ Hosted frontend
+
+ Hosted Postgres
+
+ Demo video
+
+ Evaluation write-up
+
+What’s Next
+
+The next milestone is the Tooling Layer.
+
+This introduces deterministic fraud and risk checks such as:
+
+device risk analysis
+
+behaviour anomaly detection
+
+watchlist screening
+
+rules-based risk scoring
+
+The goal is to persist structured tool outputs in the database and prepare the system for agent-based orchestration in the next phase.
