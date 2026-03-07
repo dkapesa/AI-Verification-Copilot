@@ -204,28 +204,24 @@ Fields include:
 ## Demo Evidence
 
 ### API Overview
-
 Swagger/OpenAPI overview of the current backend foundation, showing the core case management endpoints.
 
-### Successful Case Creation
+![Swagger overview](images/api/swagger-overview.png)
 
+### Successful Case Creation
 Successful case creation through the FastAPI API, returning a persisted verification case with generated UUID, status, and timestamps.
 
-### Paginated Case Listing
-
-Paginated case listing response, showing persisted verification cases and pagination metadata.
+![Create case response](images/api/create-case-response.png)
 
 ### 404 Error Handling
-
 Missing-case lookup returning a structured `404` response instead of an internal server error.
 
-### Database Persistence
-
-Direct PostgreSQL query showing persisted verification cases stored by the backend.
+![Case not found 404](images/errors/case-not-found-404.png)
 
 ### Audit Logging
-
 Audit log query showing backend events, latency measurements, and structured metadata captured during case workflows.
+
+![Audit logs table](images/database/audit-logs-table.png)
 
 ---
 
