@@ -325,6 +325,48 @@ Parallel execution allows the system to scale as new tools are added while keepi
 
 ---
 
+### Example Tool Execution Response
+
+Example response from:
+
+`POST /api/v1/cases/{case_id}/run-tools`
+
+```json
+{
+  "case_id": "2be4e5d8-c34a-47eb-90df-d4927e0316d2",
+  "results": [
+    {
+      "tool_name": "behaviour_anomaly_check",
+      "status": "SUCCESS",
+      "score": 0,
+      "confidence": 0.6,
+      "summary": "Low behavioural anomaly risk from available session data."
+    },
+    {
+      "tool_name": "device_risk_check",
+      "status": "SUCCESS",
+      "score": 0,
+      "confidence": 0.7,
+      "summary": "Low device risk."
+    },
+    {
+      "tool_name": "rules_risk_score",
+      "status": "SUCCESS",
+      "score": 0,
+      "confidence": 0.85,
+      "summary": "Low rules-based fraud risk from current structured signals."
+    },
+    {
+      "tool_name": "watchlist_screening",
+      "status": "SUCCESS",
+      "score": 0,
+      "confidence": 0.8,
+      "summary": "No matches found in watchlist screening."
+    }
+  ]
+}
+```
+
 ### Persistence & Data Modeling
 - PostgreSQL database running locally in Docker
 - SQLAlchemy ORM models for:
