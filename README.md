@@ -315,6 +315,7 @@ Fields include:
 
 ## Architecture Diagram
 
+```mermaid
 flowchart TD
     A[Browser / Swagger UI / Future Frontend] --> B[FastAPI App]
 
