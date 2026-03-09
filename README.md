@@ -383,6 +383,27 @@ Example response from:
 
 ---
 
+## Key Engineering Patterns
+
+This project intentionally demonstrates several backend engineering patterns commonly used in production systems:
+
+- **Layered Architecture**  
+  Separates API routing, business logic, persistence, and tooling layers.
+
+- **Registry Pattern**  
+  The tool registry allows new fraud detection tools to be added without modifying API endpoints.
+
+- **Service Layer Pattern**  
+  Tool execution logic is separated from the API layer to keep endpoints simple.
+
+- **Structured Tool Outputs**  
+  All tools return standardized result objects to simplify aggregation and analysis.
+
+- **Parallel Execution**  
+  Fraud tools run concurrently to minimize response latency as the system scales.
+
+---
+
 ## Architecture Diagram
 
 ```mermaid
