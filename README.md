@@ -28,7 +28,7 @@ FastAPI provides the HTTP interface and automatic OpenAPI documentation.
 
 ### **Schema Layer**
 
-Pydantic models define request validation and response serialization.
+Pydantic models define request validation and response serialisation.
 
 ### **CRUD Layer**
 
@@ -397,10 +397,10 @@ This project intentionally demonstrates several backend engineering patterns com
   Tool execution logic is separated from the API layer to keep endpoints simple.
 
 - **Structured Tool Outputs**  
-  All tools return standardized result objects to simplify aggregation and analysis.
+  All tools return standardised result objects to simplify aggregation and analysis.
 
 - **Parallel Execution**  
-  Fraud tools run concurrently to minimize response latency as the system scales.
+  Fraud tools run concurrently to minimise response latency as the system scales.
 
 ---
 
