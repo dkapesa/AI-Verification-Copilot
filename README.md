@@ -2,7 +2,19 @@
 
 **AI Verification Copilot** is a production-style internal fraud triage and decisioning system designed to simulate the type of tooling used by identity verification and trust & safety teams to review potentially suspicious verification cases.
 
-The project is being built as a full-stack engineering portfolio piece with a strong focus on backend systems, structured tool execution, agent-based orchestration, human-in-the-loop workflows, auditability, and evaluation discipline. The current implementation includes a working FastAPI backend, PostgreSQL persistence, SQLAlchemy models, Alembic migrations, paginated case APIs, and audit logging. The current implementation includes a deterministic fraud tooling layer capable of executing multiple risk analysis tools in parallel. The next phase introduces agent-based orchestration for automated decision making.
+The project is being built as a full-stack engineering portfolio piece with a strong focus on backend systems, structured tool execution, agent-based orchestration, human-in-the-loop workflows, auditability, and evaluation discipline.
+
+The current implementation includes:
+
+- a working FastAPI backend
+- PostgreSQL persistence
+- SQLAlchemy ORM models
+- Alembic migrations
+- paginated case APIs
+- structured audit logging
+- a deterministic fraud tooling layer capable of executing multiple risk analysis tools in parallel
+
+The next phase introduces agent-based orchestration for automated decision making.
 
 ---
 
@@ -33,6 +45,19 @@ Alembic manages database schema evolution through version-controlled migrations.
 ### **Audit Layer**
 
 Audit events are written to `audit_logs` to capture backend actions, metadata, and latency.
+
+## System Workflow
+
+The current system processes verification cases using the following workflow:
+
+1. A verification case is created through the API.
+2. The case is persisted in PostgreSQL.
+3. Risk analysis tools can be executed for the case.
+4. Each tool produces structured risk signals.
+5. Tool results are stored in the `tool_runs` table.
+6. The API returns aggregated tool results for review.
+
+This workflow forms the foundation for the upcoming agent orchestration layer, which will automatically interpret tool results and produce risk decisions.
 
 ---
 
@@ -69,6 +94,26 @@ Fields include:
 - `metadata` (JSONB)
 - `created_at`
 
+### **`tool_runs`**
+
+Stores the results of deterministic risk tools executed against a verification case.
+
+Fields include:
+
+- `id` (UUID)
+- `case_id`
+- `tool_name`
+- `status`
+- `score`
+- `confidence`
+- `summary`
+- `signals` (JSONB)
+- `output` (JSONB)
+- `error_message`
+- `latency_ms`
+- `started_at`
+- `completed_at`
+  
 ---
 
 ## Tech Stack
@@ -278,30 +323,13 @@ The system uses a **tool registry pattern** to dynamically discover and execute 
 
 Parallel execution allows the system to scale as new tools are added while keeping latency low.
 
+---
+
 ### Persistence & Data Modeling
 - PostgreSQL database running locally in Docker
 - SQLAlchemy ORM models for:
   - `cases`
   - `audit_logs`
-### **`tool_runs`**
-
-Stores the results of deterministic risk tools executed against a verification case.
-
-Fields include:
-
-- `id` (UUID)
-- `case_id`
-- `tool_name`
-- `status`
-- `score`
-- `confidence`
-- `summary`
-- `signals` (JSONB)
-- `output` (JSONB)
-- `error_message`
-- `latency_ms`
-- `started_at`
-- `completed_at`
 - Alembic migration-based schema management
 
 ### Reliability & Observability
