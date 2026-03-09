@@ -2,7 +2,7 @@
 
 **AI Verification Copilot** is a production-style internal fraud triage and decisioning system designed to simulate the type of tooling used by identity verification and trust & safety teams to review potentially suspicious verification cases.
 
-The project is being built as a full-stack engineering portfolio piece with a strong focus on backend systems, structured tool execution, agent-based orchestration, human-in-the-loop workflows, auditability, and evaluation discipline. The current implementation includes a working FastAPI backend, PostgreSQL persistence, SQLAlchemy models, Alembic migrations, paginated case APIs, and audit logging. The next phase introduces a deterministic tooling layer for fraud checks before moving into LLM-based orchestration.
+The project is being built as a full-stack engineering portfolio piece with a strong focus on backend systems, structured tool execution, agent-based orchestration, human-in-the-loop workflows, auditability, and evaluation discipline. The current implementation includes a working FastAPI backend, PostgreSQL persistence, SQLAlchemy models, Alembic migrations, paginated case APIs, and audit logging. The current implementation includes a deterministic fraud tooling layer capable of executing multiple risk analysis tools in parallel. The next phase introduces agent-based orchestration for automated decision making.
 
 ---
 
@@ -131,11 +131,12 @@ Fields include:
 
 ### **3) Tooling layer**
 
-- [ ]  Shared tool output schema
-- [ ]  `tool_runs` persistence model
-- [ ]  Deterministic fraud checks
-- [ ]  Tool registry
-- [ ]  Parallel tool execution
+- [x]  Shared tool output schema
+- [x]  `tool_runs` persistence model
+- [x]  Deterministic fraud checks
+- [x]  Tool registry
+- [x]  Parallel tool execution
+- [x]  Tool execution API endpoint
 
 ### **4) Agent orchestration**
 
@@ -177,7 +178,7 @@ Fields include:
 ## Current Status
 
 **Project status:** Ongoing  
-**Current phase:** Tooling Layer (Days 5–9)
+**Current phase:** Agent Orchestration
 
 ### Completed so far
 - Repo setup + local development workflow
@@ -193,11 +194,17 @@ Fields include:
   - 404 handling
   - latency instrumentation
 
+- Tooling layer
+  - structured tool result schemas
+  - tool registry pattern
+  - deterministic fraud checks
+  - parallel tool execution
+  - tool execution API endpoint
+
 ### In progress
-- Deterministic tool execution layer
-- Structured tool outputs
-- Tool result persistence
-- Preparation for agent orchestration
+- Agent orchestration layer
+- Structured decision outputs
+- risk aggregation logic
 
 ---
 
@@ -245,15 +252,56 @@ The goal is to build a realistic internal system that:
 - `POST /api/v1/cases` — create a verification case
 - `GET /api/v1/cases` — list cases with pagination
 - `GET /api/v1/cases/{case_id}` — retrieve a case by ID
+### Tool Execution
+- `POST /api/v1/cases/{case_id}/run-tools` — execute deterministic fraud analysis tools against a case
 - Stub routes for:
   - `POST /api/v1/cases/{id}/ai-review`
   - `POST /api/v1/cases/{id}/human-override`
+### Deterministic Risk Tooling
+
+The system includes a modular tooling layer capable of executing multiple fraud detection tools in parallel.
+
+Currently implemented tools include:
+
+- `behaviour_anomaly_check`
+- `device_risk_check`
+- `rules_risk_score`
+- `watchlist_screening`
+
+Each tool returns structured results including:
+
+- risk score
+- confidence level
+- summary explanation
+
+The system uses a **tool registry pattern** to dynamically discover and execute tools without hardcoding them in API endpoints.
+
+Parallel execution allows the system to scale as new tools are added while keeping latency low.
 
 ### Persistence & Data Modeling
 - PostgreSQL database running locally in Docker
 - SQLAlchemy ORM models for:
   - `cases`
   - `audit_logs`
+### **`tool_runs`**
+
+Stores the results of deterministic risk tools executed against a verification case.
+
+Fields include:
+
+- `id` (UUID)
+- `case_id`
+- `tool_name`
+- `status`
+- `score`
+- `confidence`
+- `summary`
+- `signals` (JSONB)
+- `output` (JSONB)
+- `error_message`
+- `latency_ms`
+- `started_at`
+- `completed_at`
 - Alembic migration-based schema management
 
 ### Reliability & Observability
@@ -267,19 +315,27 @@ The goal is to build a realistic internal system that:
 
 ## Architecture Diagram
 
-```mermaid
 flowchart TD
     A[Browser / Swagger UI / Future Frontend] --> B[FastAPI App]
+
     B --> C[API Routers]
     C --> D[Pydantic Schemas]
+
     C --> E[CRUD Layer]
     E --> F[SQLAlchemy ORM]
     F --> G[(PostgreSQL)]
+
     B --> H[Audit Logging]
     H --> G
-    I[Alembic Migrations] --> G
 
-    J[Future Tooling Layer] -.-> B
-    J -.-> G
-    K[Future Agent Orchestration] -.-> J
-    K -.-> G
+    B --> I[Tool Runner Service]
+    I --> J[Tool Registry]
+    J --> K[Fraud Analysis Tools]
+
+    K --> L[Tool Results]
+    L --> G
+
+    M[Alembic Migrations] --> G
+
+    N[Future Agent Layer] -.-> I
+    N -.-> G
