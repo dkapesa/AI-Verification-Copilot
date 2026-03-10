@@ -277,6 +277,157 @@ Audit log query showing backend events, latency measurements, and structured met
 
 ---
 
+## AI Decision Engine (Agent Orchestration)
+
+Phase 4 introduces an **AI decision engine** built using **LangGraph** that orchestrates fraud analysis tools, aggregates risk signals, and produces a structured AI decision.
+
+Instead of calling a model directly, the system follows a multi-stage workflow similar to what internal fraud platforms use.
+
+### Decision Pipeline
+
+1. A verification case is loaded from PostgreSQL.
+2. Deterministic fraud analysis tools execute in parallel.
+3. Structured tool outputs are aggregated into risk signals.
+4. The aggregated signals are passed to an LLM decision node.
+5. The LLM returns a structured decision (`APPROVE`, `ESCALATE`, or `REJECT`).
+6. The decision is validated using Pydantic schemas.
+7. The result is persisted to the `ai_reviews` table.
+
+This ensures that the AI layer remains **auditable, explainable, and reproducible**.
+
+---
+
+# Example AI Review Outcomes
+
+The system currently demonstrates three realistic verification scenarios.
+
+These examples are stored in the repository under:
+
+```
+backend/demo_cases/
+```
+
+---
+
+## Low-Risk Approval
+
+A case with:
+
+- valid document verification
+- no watchlist matches
+- low device risk
+- normal behavioural signals
+
+### Decision
+
+```
+APPROVE
+confidence: 0.90
+```
+
+### Reasoning
+
+- Document check result is valid with no fraud indicators
+- Low overall risk score
+- No moderate or high risk flags
+- All deterministic tools report low risk
+
+### Next Steps
+
+- Proceed with account activation
+- Continue passive monitoring for unusual behaviour
+
+---
+
+## Mixed-Signal Escalation
+
+A case containing:
+
+- emulator device signals
+- VPN / proxy detection
+- high automation behaviour patterns
+- repeated verification attempts
+
+### Decision
+
+```
+ESCALATE
+confidence: 0.65
+```
+
+### Reasoning
+
+- High device risk based on multiple suspicious signals
+- Behavioural anomaly patterns consistent with automation
+- Multiple verification attempts suggest suspicious activity
+
+### Next Steps
+
+- Manual fraud analyst review
+- Additional identity verification
+- Account activity monitoring
+
+---
+
+## High-Risk Fraud Rejection
+
+A case containing:
+
+- failed document verification
+- flagged user identifiers
+- disposable / blocked email
+- rooted emulator device
+- network obfuscation
+- automation-like behaviour patterns
+
+### Decision
+
+```
+REJECT
+confidence: 0.99
+```
+
+### Reasoning
+
+- Document verification failed
+- Watchlist match detected
+- Multiple high-risk fraud indicators
+- Behaviour patterns strongly suggest automation
+
+### Next Steps
+
+- Block the account
+- Alert fraud operations
+- Record indicators for future detection
+
+---
+
+# AI Decision Persistence
+
+AI decisions are stored in the `ai_reviews` table for auditability.
+
+Fields include:
+
+- `case_id`
+- `decision`
+- `confidence`
+- `reasons`
+- `recommended_next_steps`
+- `aggregated_signals`
+- `model_provider`
+- `model_name`
+- `latency_ms`
+- `created_at`
+
+This enables:
+
+- post-decision auditing
+- evaluation and benchmarking
+- human overrides
+- model performance analysis
+
+---
+
 ## Why this project exists
 
 Most portfolio AI projects jump straight to model calls. This project takes a more production-oriented approach.
