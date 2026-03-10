@@ -1,0 +1,15 @@
+{
+  "user_id": "user_lowrisk_001",
+  "email": "user@example.com",
+  "device_info": {
+    "device_age_days": 365
+  },
+  "document_check_result": {
+    "passed": true,
+    "document_valid": true,
+    "document_type": "passport"
+  },
+  "behaviour_summary": {
+    "session_duration_seconds": 90
+  }
+}

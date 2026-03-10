@@ -1,0 +1,17 @@
+{
+  "case_id": "0d908d7d-da04-4a51-8d0c-898fd3a3e2ba",
+  "status": "COMPLETED",
+  "decision": {
+    "decision": "APPROVE",
+    "confidence": 0.9,
+    "reasons": [
+      "Document check result is valid with no fraud indicators.",
+      "Low overall risk score with no high or moderate risk flags.",
+      "All tool summaries indicate low risk with successful checks."
+    ],
+    "recommended_next_steps": [
+      "Proceed with account activation.",
+      "Monitor user activity for any unusual behavior in the future."
+    ]
+  }
+}

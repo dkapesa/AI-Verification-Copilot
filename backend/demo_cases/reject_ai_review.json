@@ -1,0 +1,20 @@
+{
+  "case_id": "0da0b924-e675-4579-ba7b-40f41f676525",
+  "status": "COMPLETED",
+  "decision": {
+    "decision": "REJECT",
+    "confidence": 0.99,
+    "reasons": [
+      "Document check failed with invalid passport.",
+      "High automation score indicates potential fraudulent behavior.",
+      "Multiple high-risk signals including network obfuscation and repeated verification attempts.",
+      "Flagged email and user ID suggest known fraud risk.",
+      "Device rooted, emulated, and using VPN/proxy adds to risk."
+    ],
+    "recommended_next_steps": [
+      "Block the user account associated with 'fraudster_123'.",
+      "Notify the fraud review team for further investigation.",
+      "Update internal records to reflect the high-risk indicators."
+    ]
+  }
+}
