@@ -304,7 +304,7 @@ The system currently demonstrates three realistic verification scenarios.
 These examples are stored in the repository under:
 
 ```
-backend/demo_cases/
+'backend/demo_cases/'
 ```
 
 ---
