@@ -347,7 +347,7 @@ The system currently demonstrates three realistic verification scenarios.
 
 Example inputs and AI outputs are available in the repository:
 
-[`backend/demo_cases/`](backend/demo_cases/)
+[`backend/demo_cases/`](https://github.com/dkapesa/AI-Verification-Copilot/tree/master/backend/demo_cases)
 
 Each scenario contains:
 
