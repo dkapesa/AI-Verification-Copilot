@@ -192,18 +192,19 @@ Fields include:
 
 ### **5) Frontend dashboard**
 
-- [ ]  Case list view
-- [ ]  Case detail view
-- [ ]  Tool outputs
-- [ ]  AI review panel
-- [ ]  Audit timeline
+- [ ] Case list view
+- [ ] Case detail view
+- [ ] Deterministic tool outputs
+- [ ] AI review panel
+- [ ] Human override workflow
 
 ### **6) Evaluation harness**
 
-- [ ]  Synthetic dataset
-- [ ]  Expected labels
-- [ ]  Decision metrics
-- [ ]  Latency and coverage metrics
+- [ ] Synthetic fraud dataset
+- [ ] Expected decision labels
+- [ ] Accuracy / decision metrics
+- [ ] Latency monitoring
+- [ ] Coverage analysis
 
 ### **7) Production polish**
 
@@ -223,7 +224,7 @@ Fields include:
 ## Current Status
 
 **Project status:** Ongoing  
-**Current phase:** Evaluation & Observability
+**Current phase:** Frontend dashboard
 
 ### Completed so far
 - Repo setup + local development workflow
