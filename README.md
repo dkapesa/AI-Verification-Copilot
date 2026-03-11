@@ -210,7 +210,7 @@ Fields include:
 - [x]  Parallel tool execution
 - [x]  Tool execution API endpoint
 
-### **4) Agent orchestration
+### **4) Agent orchestration**
 
 - [x] LangGraph workflow
 - [x] Structured AI review output
