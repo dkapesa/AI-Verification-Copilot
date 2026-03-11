@@ -343,14 +343,16 @@ M --> N[Return Decision via API]
 
 # Example AI Review Outcomes
 
-These example cases are stored in the repository:
+The system currently demonstrates three realistic verification scenarios.
 
-[backend/demo_cases/](backend/demo_cases/)
+Example inputs and AI outputs are available in the repository:
 
-Each scenario includes:
+[`backend/demo_cases/`](backend/demo_cases/)
 
-- the **case input** sent to the API
-- the **AI review output** produced by the decision engine
+Each scenario contains:
+
+- the **case request payload** sent to the API
+- the **AI review response** returned by the decision engine
 
 Files included:
 
