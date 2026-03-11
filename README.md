@@ -283,7 +283,14 @@ Phase 4 introduces an **AI decision engine** built using **LangGraph** that orch
 
 Instead of calling a model directly, the system follows a multi-stage workflow similar to what internal fraud platforms use.
 
-### Decision Pipeline
+---
+
+## AI Decision Pipeline
+
+The AI decision engine follows a multi-stage workflow combining deterministic fraud analysis tools with LLM-based reasoning.
+
+Each verification case is first analysed by deterministic fraud detection tools.  
+The aggregated risk signals are then passed to an AI decision node which produces a structured outcome.
 
 1. A verification case is loaded from PostgreSQL.
 2. Deterministic fraud analysis tools execute in parallel.
@@ -295,6 +302,43 @@ Instead of calling a model directly, the system follows a multi-stage workflow s
 
 This ensures that the AI layer remains **auditable, explainable, and reproducible**.
 
+```mermaid
+flowchart TD
+
+A[Verification Case Created] --> B[Persist Case in PostgreSQL]
+
+B --> C[Run Deterministic Fraud Tools]
+
+C --> D1[device_risk_check]
+C --> D2[behaviour_anomaly_check]
+C --> D3[rules_risk_score]
+C --> D4[watchlist_screening]
+
+D1 --> E[Aggregate Risk Signals]
+D2 --> E
+D3 --> E
+D4 --> E
+
+E --> F[LangGraph Decision Node]
+
+F --> G[OpenAI Model]
+
+G --> H[Structured Decision Output]
+
+H --> I{Decision Type}
+
+I -->|Low Risk| J[APPROVE]
+
+I -->|Mixed Signals| K[ESCALATE]
+
+I -->|High Risk| L[REJECT]
+
+J --> M[Persist AI Review in ai_reviews table]
+K --> M
+L --> M
+
+M --> N[Return Decision via API]
+```
 ---
 
 # Example AI Review Outcomes
