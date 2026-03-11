@@ -183,12 +183,12 @@ Fields include:
 - [x]  Parallel tool execution
 - [x]  Tool execution API endpoint
 
-### **4) Agent orchestration**
+### 4) Agent orchestration
 
-- [ ]  LangGraph workflow
-- [ ]  Structured AI review output
-- [ ]  Decision persistence
-- [ ]  Retry on invalid structured output
+- [x] LangGraph workflow
+- [x] Structured AI review output
+- [x] Decision persistence
+- [x] Retry on invalid structured output
 
 ### **5) Frontend dashboard**
 
@@ -223,7 +223,7 @@ Fields include:
 ## Current Status
 
 **Project status:** Ongoing  
-**Current phase:** Agent Orchestration
+**Current phase:** Evaluation & Observability
 
 ### Completed so far
 - Repo setup + local development workflow
