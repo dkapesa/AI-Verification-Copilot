@@ -14,7 +14,7 @@ The current implementation includes:
 - structured audit logging
 - a deterministic fraud tooling layer capable of executing multiple risk analysis tools in parallel
 
-The next phase introduces agent-based orchestration for automated decision making.
+The current implementation now includes deterministic fraud tooling, LangGraph-based AI orchestration, structured decision persistence, and reproducible demo cases covering approve, escalate, and reject outcomes.
 
 ---
 
@@ -138,10 +138,11 @@ Fields include:
 - TypeScript
 - Tailwind
 
-### **AI / Orchestration (planned)**
+### **AI / Orchestration**
 
 - LangGraph
 - OpenAI API
+- structured decision outputs
 - optional Ollama fallback
 
 ---
@@ -246,11 +247,18 @@ Fields include:
   - deterministic fraud checks
   - parallel tool execution
   - tool execution API endpoint
+ 
+- Agent orchestration layer
+  - LangGraph workflow
+  - structured AI review outputs
+  - decision persistence (`ai_reviews`)
+  - retry handling for invalid structured output
+  - approve / escalate / reject demo scenarios
 
 ### In progress
-- Agent orchestration layer
-- Structured decision outputs
-- risk aggregation logic
+- Frontend dashboard
+- case review experience
+- AI review display and human override workflow
 
 ---
 
@@ -379,9 +387,10 @@ A case with:
 
 ### Decision
 
+**Decision:** `APPROVE`  
+**Confidence:** `0.90`
+
 ```
-APPROVE
-confidence: 0.90
 ```
 
 ### Reasoning
@@ -409,9 +418,9 @@ A case containing:
 
 ### Decision
 
+**Decision:** `ESCALATE`  
+**Confidence:** `0.65`
 ```
-ESCALATE
-confidence: 0.65
 ```
 
 ### Reasoning
@@ -441,9 +450,9 @@ A case containing:
 
 ### Decision
 
+**Decision:** `REJECT`  
+**Confidence:** `0.99`
 ```
-REJECT
-confidence: 0.99
 ```
 
 ### Reasoning
@@ -510,8 +519,8 @@ The goal is to build a realistic internal system that:
 ### Tool Execution
 - `POST /api/v1/cases/{case_id}/run-tools` — execute deterministic fraud analysis tools against a case
 - Stub routes for:
-  - `POST /api/v1/cases/{id}/ai-review`
-  - `POST /api/v1/cases/{id}/human-override`
+- `POST /api/v1/cases/{case_id}/ai-review` — run the LangGraph-based AI review workflow
+- `POST /api/v1/cases/{case_id}/human-override` — planned
 ### Deterministic Risk Tooling
 
 The system includes a modular tooling layer capable of executing multiple fraud detection tools in parallel.
