@@ -915,18 +915,19 @@ The project is working, but a few areas are intentionally still in progress:
 
 ---
 
+
 ---
 
 ## Overall Architecture Diagram
 
-```markdown
+```md
 ---
 
 ## Architecture Diagram
 
 The system is designed as a full-stack internal review platform with a persisted backend workflow and an analyst-facing frontend dashboard.
 
-The frontend calls the FastAPI backend, which coordinates CRUD operations, deterministic fraud tooling, AI review orchestration, and audit logging.
+The frontend calls the FastAPI backend, which coordinates CRUD operations, deterministic fraud tooling, AI review orchestration, and audit logging.  
 Operational state is persisted in PostgreSQL so the dashboard can reload the latest tool results, AI reviews, and audit history.
 
 ```mermaid
@@ -956,17 +957,3 @@ flowchart TD
     O --> G
 
     P[Alembic Migrations] --> G
-```
-
-## Future Direction
-
-The next major improvements are likely to include:
-
-- fuller analyst-console UX polish
-- reusable frontend UI primitives
-- fully persisted human override workflow
-- synthetic evaluation harness
-- `.env.example` and stronger onboarding documentation
-- deployment and portfolio packaging
-
-This project is meant to sit at the intersection of **backend engineering**, **AI systems design**, and **realistic internal-tool product thinking**.
