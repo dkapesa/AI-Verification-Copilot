@@ -963,4 +963,4 @@ The next major improvements are likely to include:
 - `.env.example` and stronger onboarding documentation
 - deployment and portfolio packaging
 
-This project is meant to sit at the intersection of **backend engineering**, **AI systems design**, and **realistic internal-tool product thinking**.
+This project is meant to bring together backend engineering, AI systems design, and realistic internal-tool product thinking**.
