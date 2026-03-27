@@ -218,7 +218,7 @@ Fields include:
 ### **Database**
 
 - PostgreSQL
-- Docker
+- 
 
 ### **Frontend**
 
@@ -253,7 +253,7 @@ Start the local stack in this order.
 ### **1) Start PostgreSQL**
 
 ```bash
-dockerstart ai_copilot_postgres
+docker start ai_copilot_postgres
 ```
 
 ### **2) Start the backend**
@@ -261,7 +261,7 @@ dockerstart ai_copilot_postgres
 From the `backend/` folder:
 
 ```bash
-python-m uvicorn app.main:app--reload--host0.0.0.0--port8000
+python -m uvicorn app.main:app--reload--host0.0.0.0--port8000
 ```
 
 Backend should be available at:
