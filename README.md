@@ -218,7 +218,7 @@ Fields include:
 ### **Database**
 
 - PostgreSQL
-- 
+- Docker
 
 ### **Frontend**
 
@@ -233,8 +233,6 @@ Fields include:
 - OpenAI API
 - structured decision outputs
 - optional Ollama fallback
-
----
 
 ## Local Development
 
@@ -312,122 +310,137 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 
 ### **1) Repo setup + dev workflow**
 
-- [x]  Monorepo structure
-- [x]  Backend, frontend, and database runnable locally
+- [x] Monorepo structure
+- [x] Backend, frontend, and database runnable locally
 
 ### **2) Backend foundation**
 
-- [x]  FastAPI backend
-- [x]  PostgreSQL persistence
-- [x]  SQLAlchemy models
-- [x]  Alembic migrations
-- [x]  Audit logging
-- [x]  Pagination and 404 handling
+- [x] FastAPI backend
+- [x] PostgreSQL persistence
+- [x] SQLAlchemy models
+- [x] Alembic migrations
+- [x] Audit logging
+- [x] Pagination and 404 handling
 
 ### **3) Tooling layer**
 
-- [x]  Shared tool output schema
-- [x]  `tool_runs` persistence model
-- [x]  Deterministic fraud checks
-- [x]  Tool registry
-- [x]  Parallel tool execution
-- [x]  Tool execution API endpoint
+- [x] Shared tool output schema
+- [x] `tool_runs` persistence model
+- [x] Deterministic fraud checks
+- [x] Tool registry
+- [x] Parallel tool execution
+- [x] Tool execution API endpoint
 
 ### **4) Agent orchestration**
 
-- [x]  LangGraph workflow
-- [x]  Structured AI review output
-- [x]  Decision persistence
-- [x]  Retry on invalid structured output
+- [x] LangGraph workflow
+- [x] Structured AI review output
+- [x] Decision persistence
+- [x] Retry on invalid structured output
 
 ### **5) Frontend dashboard**
 
-- [x]  Case list view
-- [x]  Case detail view
-- [x]  Deterministic tool outputs
-- [x]  AI review panel
-- [x]  Audit timeline
-- [x]  Human override placeholder workflow
-- [ ]  UI polish / reusable primitives
-- [ ]  Full human override persistence
-- [ ]  Additional analyst-console UX refinement
+- [x] Case list view
+- [x] Case detail view
+- [x] Deterministic tool outputs
+- [x] AI review panel
+- [x] Audit timeline
+- [x] Human override placeholder workflow
+- [x] UI polish / reusable primitives
+- [x] Persisted operational state loading on refresh
+- [x] Local API config cleanup
+- [x] Local CORS tightening
+- [x] Approve / escalate / reject paths verified through the UI
+- [x] Restart / regression pass completed
+- [ ] Full human override persistence
+- [ ] Additional mobile / tablet UX refinement
 
 ### **6) Evaluation harness**
 
-- [ ]  Synthetic fraud dataset
-- [ ]  Expected decision labels
-- [ ]  Accuracy / decision metrics
-- [ ]  Latency monitoring
-- [ ]  Coverage analysis
+- [ ] Synthetic fraud dataset
+- [ ] Expected decision labels
+- [ ] Accuracy / decision metrics
+- [ ] Latency monitoring
+- [ ] Coverage analysis
 
 ### **7) Production polish**
 
-- [ ]  Full Docker Compose stack
-- [ ]  `.env.example`
-- [ ]  Logging improvements
-- [ ]  Better developer onboarding
+- [ ] Full Docker Compose stack
+- [ ] `.env.example`
+- [ ] Logging improvements
+- [ ] Better developer onboarding
 
 ### **8) Deployment + portfolio packaging**
 
-- [ ]  Hosted backend
-- [ ]  Hosted frontend
-- [ ]  Hosted Postgres
-- [ ]  Demo video
-- [ ]  Evaluation write-up
+- [ ] Hosted backend
+- [ ] Hosted frontend
+- [ ] Hosted Postgres
+- [ ] Demo video
+- [ ] Evaluation write-up
 
 ## Current Status
 
 **Project status:** Ongoing
 
-**Current phase:** Frontend dashboard cleanup and production-minded polish
+**Current phase:** Evaluation harness planning and post-dashboard closeout
 
 ### **Completed so far**
 
 - Repo setup + local development workflow
 - Backend foundation
-    - FastAPI API
-    - PostgreSQL persistence
-    - SQLAlchemy ORM models
-    - Alembic migrations
-    - Pydantic request / response schemas
-    - CRUD case workflows
-    - audit logging
-    - pagination
-    - 404 handling
-    - latency instrumentation
+  - FastAPI API
+  - PostgreSQL persistence
+  - SQLAlchemy ORM models
+  - Alembic migrations
+  - Pydantic request / response schemas
+  - CRUD case workflows
+  - audit logging
+  - pagination
+  - 404 handling
+  - latency instrumentation
+
 - Tooling layer
-    - structured tool result schemas
-    - tool registry pattern
-    - deterministic fraud checks
-    - parallel tool execution
-    - tool execution API endpoint
-    - persisted tool run retrieval
+  - structured tool result schemas
+  - tool registry pattern
+  - deterministic fraud checks
+  - parallel tool execution
+  - tool execution API endpoint
+  - persisted tool run retrieval
+
 - Agent orchestration layer
-    - LangGraph workflow
-    - structured AI review outputs
-    - decision persistence (`ai_reviews`)
-    - retry handling for invalid structured output
-    - approve / escalate / reject demo scenarios
-    - persisted latest AI review retrieval
+  - LangGraph workflow
+  - structured AI review outputs
+  - decision persistence (`ai_reviews`)
+  - retry handling for invalid structured output
+  - approve / escalate / reject demo scenarios
+  - persisted latest AI review retrieval
+
 - Frontend dashboard
-    - case queue page
-    - case detail page
-    - deterministic tool results panel
-    - AI review panel
-    - audit timeline
-    - human override placeholder
-    - persisted latest tool results loading on refresh
-    - persisted latest AI review loading on refresh
-    - shared frontend API config cleanup
-    - local CORS tightening for local dev
+  - case queue page
+  - case detail page
+  - deterministic tool results panel
+  - AI review panel
+  - audit timeline
+  - human override placeholder
+  - persisted latest tool results loading on refresh
+  - persisted latest AI review loading on refresh
+  - queue density / responsiveness improvement
+  - detail header polish
+  - shared frontend API config cleanup
+  - local CORS tightening for local dev
+  - shared formatting helpers
+  - shared status badge helper
+  - shared stat card primitive
+  - approve / escalate / reject paths validated through the UI
+  - restart / regression pass completed successfully
 
 ### **In progress**
 
-- frontend dashboard polish
-- reusable frontend primitives
-- richer analyst-friendly rendering
+- evaluation harness design
+- frontend/backend response-shape alignment
+- frontend architecture notes / onboarding improvements
 - full human override persistence design
-- README / onboarding improvement
+- optional mobile / tablet refinement
 
 ---
 
@@ -803,7 +816,7 @@ Tool results, AI reviews, and audit activity are persisted so the frontend can r
 
 ## Current Frontend Working Behaviour
 
-The dashboard has now moved beyond a proof-of-concept state and supports a realistic analyst flow.
+The dashboard has moved beyond a proof-of-concept state and now supports a realistic analyst workflow with persisted operational state.
 
 ### **Queue page**
 
@@ -817,16 +830,19 @@ The `/cases` page currently supports:
 - pagination
 - rows-per-page selection
 - refresh action
+- improved density and interaction polish
 
 ### **Case detail page**
 
 The `/cases/[id]` page currently supports:
 
-- case metadata header
+- polished case metadata header
+- created / updated timestamps in the header
 - device info rendering
 - document check result rendering
 - behaviour summary rendering
 - back-to-queue navigation
+- more structured rendering of simple top-level fields
 
 ### **Deterministic Tool Results panel**
 
@@ -838,6 +854,8 @@ The tool results panel currently supports:
 - score display
 - confidence display
 - summary display
+- richer persisted details where available
+- expandable detail view for additional persisted tool output
 - loading and error handling
 
 ### **AI Review panel**
@@ -852,7 +870,8 @@ The AI review panel currently supports:
 - recommended next steps
 - aggregated signals
 - overall risk score
-- risk flags
+- risk flag counts
+- risk flag lists
 - tool summaries
 - reasoning summary display when returned
 
@@ -861,9 +880,10 @@ The AI review panel currently supports:
 The audit timeline currently supports:
 
 - persisted audit log fetch
+- grouped event counts
 - event timeline rendering
 - case / tool / AI workflow events
-- metadata rendering
+- metadata rendering in a more analyst-friendly format
 - refresh action
 
 ### **Human override panel**
@@ -873,6 +893,7 @@ The human override panel currently supports:
 - visible human-in-the-loop workflow placeholder
 - reviewer decision input
 - reviewer note input
+- clearer placeholder workflow framing
 - submit action against the current stub endpoint
 
 ---
@@ -892,31 +913,40 @@ A quick manual smoke test for the current dashboard:
 9. Refresh the page and confirm persisted latest AI review still appears
 10. Refresh the audit timeline and confirm recent activity is shown
 
-A commonly used test case during development has been:
+The dashboard has been manually validated across all three decision paths:
+
+- **APPROVE** case
+- **ESCALATE** case
+- **REJECT** case
+
+A restart / regression pass has also been completed to confirm that persisted tool runs, persisted AI reviews, and audit timeline history remain available after restarting Docker, backend, and frontend.
+
+Commonly used development test cases have included:
 
 - `0d908d7d-da04-4a51-8d0c-898fd3a3e2ba`
+- `8cd0afa4-5514-4c0a-a352-a9ed09fdfc21`
+- `9a2a963a-5752-40d9-a117-3854ba7390f0`
+- `8f41eca5-4ab6-4c27-85aa-7d377d8116ce`
 
 ---
 
 ## Known Limitations / Technical Debt
 
-The project is working, but a few areas are intentionally still in progress:
+The project is working end-to-end, but a few areas are intentionally still in progress:
 
 - frontend types still need to be aligned more tightly to exact backend response shapes
-- shared UI primitives for loading / error / empty states still need to be introduced
-- queue responsiveness and density can be improved
-- case detail header can be polished further
+- shared UI primitives for loading / error / empty states still need to be introduced consistently
+- queue mobile / tablet fallback can be improved further
 - nested JSON rendering can become more analyst-friendly over time
+- audit event grouping / collapsing can be refined further for very long timelines
 - human override workflow is still a placeholder and not yet fully persisted end-to-end
-- richer tool output details could be exposed in the UI
 - `.env.example` files still need to be added
 - local developer onboarding can still be improved further
+- evaluation harness and benchmarking workflow are the next major phase
 
 ---
 
 ## Overall Architecture Diagram
-
-## Architecture Diagram
 
 The system is designed as a full-stack internal review platform with a persisted backend workflow and an analyst-facing frontend dashboard.
 
@@ -956,11 +986,12 @@ flowchart TD
 
 The next major improvements are likely to include:
 
-- fuller analyst-console UX polish
-- reusable frontend UI primitives
-- fully persisted human override workflow
 - synthetic evaluation harness
-- `.env.example` and stronger onboarding documentation
+- expected decision labels and benchmarking
+- fuller human override persistence
+- additional frontend architecture cleanup
+- stronger onboarding documentation
+- `.env.example` support
 - deployment and portfolio packaging
 
-This project is meant to bring together backend engineering, AI systems design, and realistic internal-tool product thinking**.
+This project is meant to bring together backend engineering, AI systems design, and realistic internal-tool product thinking.
