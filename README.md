@@ -447,17 +447,17 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 ## Demo Evidence
 
 ### API Overview
-Swagger/OpenAPI overview of the current backend foundation, showing the core case management endpoints.
+Swagger / OpenAPI overview of the current backend foundation, showing the core case management endpoints.
 
 ![Swagger overview](images/api/swagger-overview.png)
 
 ### Successful Case Creation
-Successful case creation through the FastAPI API, returning a persisted verification case with generated UUID, status, and timestamps.
+Example of successful case creation through the FastAPI API, returning a persisted verification case with a generated UUID, status, and timestamps.
 
 ![Create case response](images/api/create-case-response.png)
 
-### 404 Error Handling
-Missing-case lookup returning a structured `404` response instead of an internal server error.
+### `404` Error Handling
+Example of a missing-case lookup returning a structured `404` response instead of an internal server error.
 
 ![Case not found 404](images/errors/case-not-found-404.png)
 
@@ -468,29 +468,27 @@ Audit log query showing backend events, latency measurements, and structured met
 
 ## AI Decision Engine (Agent Orchestration)
 
-Phase 4 introduces an **AI decision engine** built with **LangGraph** that orchestrates deterministic fraud tools, aggregates structured signals, and produces validated AI review outcomes.
+Phase 4 introduces an **AI decision engine** built with **LangGraph** that orchestrates deterministic fraud tools, aggregates structured signals, and produces validated, structured AI review outcomes.
 
-Instead of calling a model directly, the system follows a multi-stage workflow similar to what internal fraud platforms use.
+Rather than calling a model directly, the system follows a multi-stage workflow designed to resemble the review flow used in internal fraud and verification platforms.
 
 ---
 
 ## AI Decision Pipeline
 
-The AI decision engine follows a multi-stage workflow combining deterministic fraud analysis tools with LLM-based reasoning.
+The AI decision engine follows a multi-stage workflow that combines deterministic fraud analysis tools with LLM-assisted review.
 
-Each verification case is first analysed by deterministic fraud detection tools.
-
-The aggregated risk signals are then passed to an AI decision node which produces a structured outcome.
+Each verification case is first analysed by deterministic fraud detection tools. The aggregated risk signals are then passed to an AI review node, which produces a structured outcome.
 
 1. A verification case is loaded from PostgreSQL.
 2. Deterministic fraud analysis tools execute in parallel.
 3. Structured tool outputs are aggregated into risk signals.
-4. The aggregated signals are passed to an LLM decision node.
+4. The aggregated signals are passed to an LLM review node.
 5. The LLM returns a structured decision (`APPROVE`, `ESCALATE`, or `REJECT`).
 6. The decision is validated using Pydantic schemas.
 7. The result is persisted to the `ai_reviews` table.
 
-This ensures that the AI layer remains **auditable, explainable, and reproducible**.
+This helps keep the AI layer **auditable, explainable, and reproducible**.
 
 ```mermaid
 flowchart TD
@@ -531,13 +529,13 @@ M --> N[Return Decision via API]
 
 ## Example AI Review Outcomes
 
-The system currently demonstrates three realistic verification scenarios.
+The system currently demonstrates three representative verification scenarios.
 
-Example inputs and AI outputs are available in the repository:
+Example case inputs and AI review outputs are available in the repository:
 
 [`backend/demo_cases/`](https://github.com/dkapesa/AI-Verification-Copilot/tree/master/backend/demo_cases)
 
-Each scenario contains:
+Each scenario includes:
 
 - the **case request payload** sent to the API
 - the **AI review response** returned by the decision engine
@@ -562,16 +560,15 @@ A case with:
 
 ### **Decision**
 
-**Decision:** `APPROVE`
-
+**Decision:** `APPROVE`  
 **Confidence:** `0.90`
 
 ### **Reasoning**
 
-- Document check result is valid with no fraud indicators
+- Document verification passed with no fraud indicators
 - Low overall risk score
-- No moderate or high risk flags
-- All deterministic tools report low risk
+- No moderate- or high-risk flags
+- All deterministic tools reported low risk
 
 ### **Next Steps**
 
@@ -591,15 +588,14 @@ A case containing:
 
 ### **Decision**
 
-**Decision:** `ESCALATE`
-
+**Decision:** `ESCALATE`  
 **Confidence:** `0.65`
 
 ### **Reasoning**
 
 - High device risk based on multiple suspicious signals
 - Behavioural anomaly patterns consistent with automation
-- Multiple verification attempts suggest suspicious activity
+- Repeated verification attempts suggest suspicious activity
 
 ### **Next Steps**
 
@@ -622,15 +618,14 @@ A case containing:
 
 ### **Decision**
 
-**Decision:** `REJECT`
-
+**Decision:** `REJECT`  
 **Confidence:** `0.99`
 
 ### **Reasoning**
 
 - Document verification failed
 - Watchlist match detected
-- Multiple high-risk fraud indicators
+- Multiple high-risk fraud indicators were present
 - Behaviour patterns strongly suggest automation
 
 ### **Next Steps**
@@ -643,7 +638,7 @@ A case containing:
 
 ## AI Decision Persistence
 
-AI decisions are stored in the `ai_reviews` table for auditability.
+AI review outputs are stored in the `ai_reviews` table for auditability, later retrieval, and downstream evaluation.
 
 Fields include:
 
@@ -658,11 +653,11 @@ Fields include:
 - `latency_ms`
 - `created_at`
 
-This enables:
+This supports:
 
 - post-decision auditing
 - evaluation and benchmarking
-- human overrides
+- human override workflows
 - model performance analysis
 
 ---
@@ -821,7 +816,7 @@ This project intentionally demonstrates several backend and applied AI engineeri
 
 ## Current Frontend Working Behaviour
 
-The dashboard has moved beyond a proof-of-concept state and now supports a realistic analyst workflow with persisted operational state.
+The dashboard has moved beyond a proof-of-concept state and now supports a more realistic analyst workflow with persisted operational state.
 
 ### **Queue page**
 
@@ -830,8 +825,8 @@ The `/cases` page currently supports:
 - persisted case loading from the backend
 - internal-style queue layout
 - case ID / email / user ID / status columns
-- created / updated timestamps
-- search / filter
+- created and updated timestamps
+- search and filter
 - pagination
 - rows-per-page selection
 - refresh action
@@ -842,7 +837,7 @@ The `/cases` page currently supports:
 The `/cases/[id]` page currently supports:
 
 - polished case metadata header
-- created / updated timestamps in the header
+- created and updated timestamps in the header
 - device info rendering
 - document check result rendering
 - behaviour summary rendering
@@ -854,13 +849,13 @@ The `/cases/[id]` page currently supports:
 The tool results panel currently supports:
 
 - on-demand tool execution
-- persisted latest tool result loading on refresh
+- latest persisted tool result loading on refresh
 - status display
 - score display
 - confidence display
 - summary display
 - richer persisted details where available
-- expandable detail view for additional persisted tool output
+- expandable detail views for additional persisted tool output
 - loading and error handling
 
 ### **AI Review panel**
@@ -884,10 +879,10 @@ The AI review panel currently supports:
 
 The audit timeline currently supports:
 
-- persisted audit log fetch
+- persisted audit log retrieval
 - grouped event counts
 - event timeline rendering
-- case / tool / AI workflow events
+- case, tool, and AI workflow events
 - metadata rendering in a more analyst-friendly format
 - refresh action
 
@@ -908,23 +903,23 @@ The human override panel currently supports:
 A quick manual smoke test for the current dashboard:
 
 1. Start Docker PostgreSQL
-2. Start backend
-3. Start frontend
+2. Start the backend
+3. Start the frontend
 4. Open `/cases`
 5. Open a case detail page
 6. Run deterministic tools
 7. Run AI review
-8. Refresh the page and confirm persisted tool results still appear
-9. Refresh the page and confirm persisted latest AI review still appears
+8. Refresh the page and confirm the latest persisted tool results still appear
+9. Refresh the page and confirm the latest persisted AI review still appears
 10. Refresh the audit timeline and confirm recent activity is shown
 
 The dashboard has been manually validated across all three decision paths:
 
-- **APPROVE** case
-- **ESCALATE** case
-- **REJECT** case
+- **APPROVE**
+- **ESCALATE**
+- **REJECT**
 
-A restart / regression pass has also been completed to confirm that persisted tool runs, persisted AI reviews, and audit timeline history remain available after restarting Docker, backend, and frontend.
+A restart / regression pass has also been completed to confirm that persisted tool runs, persisted AI reviews, and audit timeline history remain available after restarting Docker, the backend, and the frontend.
 
 Commonly used development test cases have included:
 
@@ -955,8 +950,7 @@ The project is working end to end, but several areas are intentionally still bei
 
 The system is designed as a full-stack internal review platform with a persisted backend workflow and an analyst-facing frontend dashboard.
 
-The frontend calls the FastAPI backend, which coordinates CRUD operations, deterministic fraud tooling, AI review orchestration, and audit logging.
-Operational state is persisted in PostgreSQL so the dashboard can reload the latest tool results, AI reviews, and audit history.
+The frontend calls the FastAPI backend, which coordinates CRUD operations, deterministic fraud tooling, AI review orchestration, and audit logging. Operational state is persisted in PostgreSQL so the dashboard can reload the latest tool results, AI reviews, and audit history.
 
 ```mermaid
 flowchart TD
@@ -991,7 +985,7 @@ flowchart TD
 
 The next major improvements are likely to include:
 
-- synthetic evaluation harness
+- a synthetic evaluation harness
 - expected decision labels and benchmarking
 - fuller human override persistence
 - additional frontend architecture cleanup
@@ -999,4 +993,4 @@ The next major improvements are likely to include:
 - `.env.example` support
 - deployment and portfolio packaging
 
-This project is meant to bring together backend engineering, AI systems design, and realistic internal-tool product thinking.
+This project is intended to bring together backend engineering, applied AI systems design, and realistic internal-tool product thinking in a single end-to-end workflow.
