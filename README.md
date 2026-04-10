@@ -1,17 +1,17 @@
 # AI Verification Copilot
 
-**AI Verification Copilot** is a production-style internal fraud triage and decisioning system designed to simulate the type of tooling used by identity verification, fraud operations, and trust & safety teams to review potentially suspicious verification cases.
+**AI Verification Copilot** is a production-style internal fraud triage and decisioning system designed to simulate the kind of tooling used by identity verification, fraud operations, and trust & safety teams to review potentially suspicious verification cases.
 
-This project is intentionally designed to demonstrate **AI systems engineering patterns rather than simple model prompting**. It is being built as a full-stack engineering portfolio piece with a strong focus on backend systems, structured tool execution, agent-based orchestration, human-in-the-loop workflows, auditability, persistence, explainability, and evaluation discipline.
+This project is intentionally designed to demonstrate **applied AI systems engineering and backend/product engineering patterns**, not just simple model prompting. It is a full-stack engineering portfolio project focused on structured tool execution, orchestration, persistence, auditability, explainability, and human-in-the-loop workflow design.
 
-The goal is not just to call a model, but to build something that feels like a realistic internal analyst tool:
+The goal is to build something that feels like a realistic internal analyst tool, where:
 
 - verification cases are persisted
 - deterministic fraud tools run against those cases
 - AI review outputs are structured and persisted
 - audit history is captured
 - the frontend behaves like an internal review console
-- the system can later support evaluation, benchmarking, and human override workflows
+- the system can later support evaluation, benchmarking, and fuller human override workflows
 
 The current implementation includes:
 
@@ -35,45 +35,45 @@ The current implementation includes:
 
 ## Backend Architecture
 
-The backend is designed using a layered architecture so that each part of the system remains independently understandable, testable, and extensible.
+The backend follows a layered architecture to keep routing, validation, persistence, workflow logic, and auditability clearly separated. This makes the system easier to reason about, extend, and test as the project grows.
 
 ### **API Layer**
 
-FastAPI provides the HTTP interface and automatic OpenAPI documentation.
+FastAPI exposes the HTTP interface, defines versioned endpoints, and provides automatic OpenAPI documentation for local development and testing.
 
 ### **Schema Layer**
 
-Pydantic models define request validation and response serialisation.
+Pydantic models handle request validation and response serialisation so API contracts remain explicit and structured.
 
 ### **CRUD Layer**
 
-Database access is separated into CRUD functions to keep route handlers thin and maintainable.
+Database operations are separated into CRUD functions to keep route handlers thin and reduce coupling between API logic and persistence logic.
 
 ### **Persistence Layer**
 
-SQLAlchemy ORM maps Python models to PostgreSQL tables.
+SQLAlchemy ORM maps Python models to PostgreSQL tables and supports persisted operational state across cases, tool runs, AI reviews, and audit events.
 
 ### **Migration Layer**
 
-Alembic manages database schema evolution through version-controlled migrations.
+Alembic manages schema evolution through version-controlled migrations so database changes remain traceable and repeatable.
 
 ### **Audit Layer**
 
-Audit events are written to `audit_logs` to capture backend actions, metadata, and latency.
+Audit events are written to `audit_logs` to capture backend actions, workflow metadata, and latency for traceability and operational visibility.
 
 ### **Tool Execution Layer**
 
-Deterministic fraud tools execute against structured case data and return standardised tool outputs.
+Deterministic fraud tools execute against structured case data and return standardised outputs that can be persisted, reviewed, and reused by downstream workflow steps.
 
 ### **AI Review Layer**
 
-A LangGraph-based orchestration flow aggregates tool signals and produces structured AI review outputs that are validated and persisted.
+A LangGraph-based orchestration flow aggregates deterministic tool signals and produces structured AI review outputs that are validated and persisted for later retrieval, audit, and evaluation.
 
 ---
 
 ## Frontend Dashboard
 
-The project now includes a working internal-style analyst dashboard built with **Next.js**, **TypeScript**, and **Tailwind CSS**.
+The project includes a working internal-style analyst dashboard built with **Next.js**, **TypeScript**, and **Tailwind CSS**.
 
 The frontend is designed to simulate a realistic internal review console where an analyst can:
 
@@ -82,7 +82,7 @@ The frontend is designed to simulate a realistic internal review console where a
 - inspect structured case data
 - run deterministic fraud tools
 - run an AI review
-- inspect explainability and aggregated signals
+- inspect aggregated signals and explainability
 - view audit history
 - see a human override placeholder workflow
 
@@ -94,12 +94,12 @@ The frontend is designed to simulate a realistic internal review console where a
 ### **Current frontend capabilities**
 
 - paginated queue view
-- search / filter on queue
+- search and filter on the queue
 - refresh action
 - rows-per-page selector
 - internal-tool styling
 - case metadata rendering
-- device info / document check / behaviour summary panels
+- device info, document check, and behaviour summary panels
 - deterministic tool results panel
 - AI review panel
 - audit timeline panel
@@ -117,14 +117,14 @@ The current system processes verification cases using the following workflow:
 3. Deterministic fraud analysis tools execute in parallel.
 4. Each tool returns structured risk signals.
 5. Tool results are stored in the `tool_runs` table.
-6. Aggregated signals are passed into a LangGraph-based AI decision workflow.
-7. The AI decision node produces a structured outcome (`APPROVE`, `ESCALATE`, or `REJECT`).
+6. Aggregated signals are passed into a LangGraph-based AI review workflow.
+7. The AI review node produces a structured outcome (`APPROVE`, `ESCALATE`, or `REJECT`).
 8. The result is persisted to the `ai_reviews` table and returned via the API.
 9. Audit events are written for important workflow actions.
 10. The frontend dashboard can reload the latest persisted tool results and latest persisted AI review for a case.
 11. Audit history can be viewed in the case detail screen.
 
-This workflow mirrors the structure of internal trust & safety and identity verification systems, where deterministic checks and model-assisted review work together.
+This workflow is designed to reflect the structure of internal trust & safety and identity verification systems, where deterministic checks and model-assisted review operate together within a persisted, auditable workflow.
 
 ---
 
@@ -132,7 +132,7 @@ This workflow mirrors the structure of internal trust & safety and identity veri
 
 ### **`cases`**
 
-Represents a verification case under review.
+Stores a verification case under review.
 
 Fields include:
 
@@ -148,7 +148,7 @@ Fields include:
 
 ### **`audit_logs`**
 
-Stores backend and workflow events for observability and traceability.
+Stores backend and workflow events for traceability and operational visibility.
 
 Fields include:
 
@@ -183,7 +183,7 @@ Fields include:
 
 ### **`ai_reviews`**
 
-Stores structured AI decision outputs generated by the LangGraph review workflow.
+Stores structured AI review outputs generated by the LangGraph-based review workflow.
 
 Fields include:
 
@@ -210,7 +210,7 @@ Fields include:
 
 - Python
 - FastAPI
-- Pydantic / pydantic-settings
+- Pydantic / `pydantic-settings`
 - SQLAlchemy
 - Alembic
 - Uvicorn
@@ -231,7 +231,7 @@ Fields include:
 
 - LangGraph
 - OpenAI API
-- structured decision outputs
+- structured AI review outputs
 - optional Ollama fallback
 
 ## Local Development
@@ -246,7 +246,7 @@ Fields include:
 
 ### **Startup sequence**
 
-Start the local stack in this order.
+Start the local stack in the following order.
 
 ### **1) Start PostgreSQL**
 
@@ -259,10 +259,10 @@ docker start ai_copilot_postgres
 From the `backend/` folder:
 
 ```bash
-python -m uvicorn app.main:app--reload--host0.0.0.0--port8000
+python-m uvicorn app.main:app--reload--host0.0.0.0--port8000
 ```
 
-Backend should be available at:
+The backend should be available at:
 
 - `http://localhost:8000`
 - Swagger docs: `http://localhost:8000/docs`
@@ -275,13 +275,13 @@ From the `frontend/` folder:
 npm run dev
 ```
 
-Frontend should be available at:
+The frontend should be available at:
 
 - `http://localhost:3000`
 
-### **Frontend local env**
+### **Frontend local environment**
 
-Expected local frontend env:
+Set the following local frontend environment variable:
 
 ```
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
@@ -289,13 +289,13 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 
 Place it in:
 
-```
+```bash
 frontend/.env.local
 ```
 
 ### **Local CORS note**
 
-The backend CORS setup has been tightened for local development and explicitly allows common local frontend origins such as:
+For local development, the backend CORS configuration explicitly allows common local frontend origins such as:
 
 - `http://localhost:3000`
 - `http://127.0.0.1:3000`
@@ -303,12 +303,11 @@ The backend CORS setup has been tightened for local development and explicitly a
 - `http://127.0.0.1:3001`
 
 This keeps local development flexible while avoiding wildcard CORS as the default.
-
 ---
 
 ## Roadmap
 
-### **1) Repo setup + dev workflow**
+### **1) Repo setup + development workflow**
 
 - [x] Monorepo structure
 - [x] Backend, frontend, and database runnable locally
@@ -320,7 +319,7 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - [x] SQLAlchemy models
 - [x] Alembic migrations
 - [x] Audit logging
-- [x] Pagination and 404 handling
+- [x] Pagination and `404` handling
 
 ### **3) Tooling layer**
 
@@ -331,12 +330,12 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - [x] Parallel tool execution
 - [x] Tool execution API endpoint
 
-### **4) Agent orchestration**
+### **4) AI orchestration**
 
 - [x] LangGraph workflow
 - [x] Structured AI review output
 - [x] Decision persistence
-- [x] Retry on invalid structured output
+- [x] Retry handling for invalid structured output
 
 ### **5) Frontend dashboard**
 
@@ -346,11 +345,11 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - [x] AI review panel
 - [x] Audit timeline
 - [x] Human override placeholder workflow
-- [x] UI polish / reusable primitives
+- [x] UI polish and reusable primitives
 - [x] Persisted operational state loading on refresh
-- [x] Local API config cleanup
+- [x] Local API configuration cleanup
 - [x] Local CORS tightening
-- [x] Approve / escalate / reject paths verified through the UI
+- [x] `APPROVE` / `ESCALATE` / `REJECT` paths verified through the UI
 - [x] Restart / regression pass completed
 - [ ] Full human override persistence
 - [ ] Additional mobile / tablet UX refinement
@@ -359,22 +358,22 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 
 - [ ] Synthetic fraud dataset
 - [ ] Expected decision labels
-- [ ] Accuracy / decision metrics
+- [ ] Accuracy and decision metrics
 - [ ] Latency monitoring
 - [ ] Coverage analysis
 
-### **7) Production polish**
+### **7) Production-minded polish**
 
 - [ ] Full Docker Compose stack
 - [ ] `.env.example`
 - [ ] Logging improvements
 - [ ] Better developer onboarding
 
-### **8) Deployment + portfolio packaging**
+### **8) Deployment and portfolio packaging**
 
 - [ ] Hosted backend
 - [ ] Hosted frontend
-- [ ] Hosted Postgres
+- [ ] Hosted PostgreSQL
 - [ ] Demo video
 - [ ] Evaluation write-up
 
@@ -382,21 +381,22 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 
 **Project status:** Ongoing
 
-**Current phase:** Evaluation harness planning and post-dashboard closeout
+**Current phase:** Evaluation harness planning and post-dashboard hardening
 
 ### **Completed so far**
 
-- Repo setup + local development workflow
+- Repo setup and local development workflow
+
 - Backend foundation
   - FastAPI API
   - PostgreSQL persistence
   - SQLAlchemy ORM models
   - Alembic migrations
-  - Pydantic request / response schemas
+  - Pydantic request and response schemas
   - CRUD case workflows
   - audit logging
   - pagination
-  - 404 handling
+  - `404` handling
   - latency instrumentation
 
 - Tooling layer
@@ -407,12 +407,12 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
   - tool execution API endpoint
   - persisted tool run retrieval
 
-- Agent orchestration layer
+- AI orchestration layer
   - LangGraph workflow
   - structured AI review outputs
   - decision persistence (`ai_reviews`)
   - retry handling for invalid structured output
-  - approve / escalate / reject demo scenarios
+  - `APPROVE` / `ESCALATE` / `REJECT` demo scenarios
   - persisted latest AI review retrieval
 
 - Frontend dashboard
@@ -424,23 +424,23 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
   - human override placeholder
   - persisted latest tool results loading on refresh
   - persisted latest AI review loading on refresh
-  - queue density / responsiveness improvement
+  - queue density and responsiveness improvements
   - detail header polish
-  - shared frontend API config cleanup
-  - local CORS tightening for local dev
+  - shared frontend API configuration cleanup
+  - local CORS tightening for local development
   - shared formatting helpers
   - shared status badge helper
   - shared stat card primitive
-  - approve / escalate / reject paths validated through the UI
+  - `APPROVE` / `ESCALATE` / `REJECT` paths validated through the UI
   - restart / regression pass completed successfully
 
 ### **In progress**
 
 - evaluation harness design
-- frontend/backend response-shape alignment
-- frontend architecture notes / onboarding improvements
+- frontend and backend response-shape alignment
+- frontend architecture notes and developer onboarding improvements
 - full human override persistence design
-- optional mobile / tablet refinement
+- optional mobile and tablet UX refinement
 
 ---
 
@@ -669,17 +669,17 @@ This enables:
 
 ## Why this project exists
 
-Most portfolio AI projects jump straight to model calls. This project takes a more production-oriented approach.
+Many portfolio AI projects focus on model calls in isolation. This project takes a more production-minded approach.
 
 The goal is to build a realistic internal system that:
 
 - persists verification cases
-- runs deterministic risk checks
+- runs deterministic risk checks before model-assisted review
 - records audit trails
-- supports structured AI decisions
-- enables human review and override
+- supports structured AI review outputs
+- enables human review and override workflows
 - exposes explainability and aggregated signals
-- can later be evaluated on synthetic case datasets
+- can later be evaluated against synthetic case datasets
 
 ---
 
@@ -688,17 +688,17 @@ The goal is to build a realistic internal system that:
 ### **Backend API**
 
 - `POST /api/v1/cases` — create a verification case
-- `GET /api/v1/cases` — list cases with pagination
+- `GET /api/v1/cases` — list persisted cases with pagination
 - `GET /api/v1/cases/{case_id}` — retrieve a case by ID
 
-### **Tool Execution**
+### **Tool Execution and Review Workflow**
 
 - `POST /api/v1/cases/{case_id}/run-tools` — execute deterministic fraud analysis tools against a case
-- `GET /api/v1/cases/{case_id}/tool-runs` — fetch latest persisted tool results for a case
+- `GET /api/v1/cases/{case_id}/tool-runs` — fetch the latest persisted tool results for a case
 - `POST /api/v1/cases/{case_id}/ai-review` — run the LangGraph-based AI review workflow
 - `GET /api/v1/cases/{case_id}/ai-reviews/latest` — fetch the latest persisted AI review for a case
 - `GET /api/v1/cases/{case_id}/audit-logs` — fetch persisted audit history for a case
-- `POST /api/v1/cases/{case_id}/human-override` — current placeholder / stub workflow endpoint
+- `POST /api/v1/cases/{case_id}/human-override` — placeholder endpoint for the current human override workflow
 
 ### **Frontend Dashboard**
 
@@ -797,20 +797,25 @@ Example response from:
 
 ## Key Engineering Patterns
 
-This project intentionally demonstrates several backend engineering patterns commonly used in production systems:
+This project intentionally demonstrates several backend and applied AI engineering patterns commonly used in production-minded systems:
 
-- **Layered Architecture**
-Separates API routing, business logic, persistence, and tooling layers.
-- **Registry Pattern**
-The tool registry allows new fraud detection tools to be added without modifying API endpoints.
-- **Service Layer Pattern**
-Tool execution logic is separated from the API layer to keep endpoints simple.
-- **Structured Tool Outputs**
-All tools return standardised result objects to simplify aggregation and analysis.
-- **Parallel Execution**
-Fraud tools run concurrently to minimise response latency as the system scales.
-- **Persistence-First Operational State**
-Tool results, AI reviews, and audit activity are persisted so the frontend can reload the latest operational state instead of depending only on per-session browser state.
+- **Layered Architecture**  
+  Separates API routing, validation, persistence, workflow logic, and tooling concerns.
+
+- **Registry Pattern**  
+  The tool registry allows new fraud detection tools to be added without modifying API endpoints.
+
+- **Service Layer Pattern**  
+  Tool execution and workflow logic are separated from the API layer to keep endpoints thinner and easier to maintain.
+
+- **Structured Tool Outputs**  
+  All tools return standardised result objects to simplify downstream aggregation, persistence, and analysis.
+
+- **Parallel Execution**  
+  Fraud tools run concurrently to reduce latency as the number of checks grows.
+
+- **Persistence-First Operational State**  
+  Tool results, AI reviews, and audit activity are persisted so the frontend can reload the latest operational state instead of depending only on in-memory or per-session browser state.
 
 ---
 
@@ -932,17 +937,17 @@ Commonly used development test cases have included:
 
 ## Known Limitations / Technical Debt
 
-The project is working end-to-end, but a few areas are intentionally still in progress:
+The project is working end to end, but several areas are intentionally still being hardened or extended:
 
-- frontend types still need to be aligned more tightly to exact backend response shapes
-- shared UI primitives for loading / error / empty states still need to be introduced consistently
-- queue mobile / tablet fallback can be improved further
+- frontend types still need tighter alignment with exact backend response shapes
+- shared UI primitives for loading, error, and empty states still need to be applied consistently
+- mobile and tablet support for the queue can be improved further
 - nested JSON rendering can become more analyst-friendly over time
-- audit event grouping / collapsing can be refined further for very long timelines
-- human override workflow is still a placeholder and not yet fully persisted end-to-end
+- audit event grouping and collapsing can be refined further for very long timelines
+- the human override workflow is still a placeholder and is not yet fully persisted end to end
 - `.env.example` files still need to be added
-- local developer onboarding can still be improved further
-- evaluation harness and benchmarking workflow are the next major phase
+- local developer onboarding can be improved further
+- the evaluation harness and benchmarking workflow are the next major phase
 
 ---
 
