@@ -1,0 +1,23 @@
+{
+  "user_id": "fraudster_123",
+  "email": "blocked@example.com",
+  "device_info": {
+    "is_emulator": true,
+    "is_rooted": true,
+    "vpn_detected": true,
+    "proxy_detected": true,
+    "account_count_on_device": 5,
+    "device_age_days": 1
+  },
+  "document_check_result": {
+    "passed": false,
+    "document_valid": false,
+    "document_type": "passport"
+  },
+  "behaviour_summary": {
+    "typing_speed_wpm": 165,
+    "repeated_verification_attempts": 5,
+    "session_duration_seconds": 8,
+    "automation_score": 0.96
+  }
+}

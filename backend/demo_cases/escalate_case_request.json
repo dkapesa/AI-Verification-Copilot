@@ -1,0 +1,21 @@
+{
+  "user_id": "user_escalate_001",
+  "email": "escalate@example.com",
+  "device_info": {
+    "is_emulator": true,
+    "vpn_detected": true,
+    "account_count_on_device": 3,
+    "device_age_days": 2
+  },
+  "document_check_result": {
+    "passed": true,
+    "document_valid": true,
+    "document_type": "passport"
+  },
+  "behaviour_summary": {
+    "typing_speed_wpm": 150,
+    "repeated_verification_attempts": 3,
+    "session_duration_seconds": 10,
+    "automation_score": 0.82
+  }
+}

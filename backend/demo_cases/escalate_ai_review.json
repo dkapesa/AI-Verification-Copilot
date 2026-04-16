@@ -1,0 +1,18 @@
+{
+  "case_id": "4bbddb49-31a1-45f0-a4af-e6bab6a6751a",
+  "status": "COMPLETED",
+  "decision": {
+    "decision": "ESCALATE",
+    "confidence": 0.65,
+    "reasons": [
+      "High device risk based on multiple suspicious signals.",
+      "High behavioural anomaly risk indicates potential automation-like patterns.",
+      "Multiple verification attempts suggest possible suspicious intent."
+    ],
+    "recommended_next_steps": [
+      "Conduct a manual review of user behavior and verification attempts.",
+      "Cross-check the user's account history for any additional red flags.",
+      "Consider reaching out to the user for further verification or clarification."
+    ]
+  }
+}
