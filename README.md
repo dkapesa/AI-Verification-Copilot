@@ -259,7 +259,7 @@ docker start ai_copilot_postgres
 From the `backend/` folder:
 
 ```bash
-python-m uvicorn app.main:app--reload--host0.0.0.0--port8000
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 The backend should be available at:
