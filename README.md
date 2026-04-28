@@ -128,6 +128,28 @@ This workflow is designed to reflect the structure of internal trust & safety an
 
 ---
 
+## Testing and validation
+
+The backend includes a targeted pytest suite covering API contracts, structured error handling, persistence, schema validation, deterministic tool execution, AI review workflows, and audit behavior.
+
+Automated tests currently cover:
+
+- case creation, retrieval, pagination, and structured missing-case responses
+- audit log retrieval and audit event creation
+- deterministic fraud tool execution and latest persisted tool result retrieval
+- tool registry behavior and service-layer tool orchestration
+- Pydantic validation for deterministic tool inputs and outputs
+- Pydantic validation for structured AI review outputs
+- approve, escalate, and reject workflow-style scenarios using controlled mocked AI outputs
+- AI review endpoint behavior without live OpenAI calls
+- latest persisted AI review retrieval
+- AI review persistence, retry metadata, model metadata, latency metadata, and completed/failed audit events
+- sanitized provider failure messages for authentication, rate limit, timeout, and connection errors
+
+The automated test suite avoids live OpenAI API calls by default. AI review paths are tested with controlled mocked outputs so the suite can run reliably without external provider credentials.
+
+---
+
 ## Data Model
 
 ### **`cases`**
