@@ -468,25 +468,59 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 
 ## Demo Evidence
 
-### API Overview
-Swagger / OpenAPI overview of the current backend foundation, showing the core case management endpoints.
+The repository includes screenshot evidence for automated tests, API workflows, database persistence, frontend analyst workflows, and architecture diagrams.
 
-![Swagger overview](images/api/swagger-overview.png)
+### Backend Test Suite
 
-### Successful Case Creation
-Example of successful case creation through the FastAPI API, returning a persisted verification case with a generated UUID, status, and timestamps.
+Pytest coverage for API endpoints, structured errors, pagination, audit logging, deterministic tool execution, schema validation, mocked AI review workflows, persisted latest-state retrieval, approve / escalate / reject scenarios, and AI review persistence/audit behavior.
 
-![Create case response](images/api/create-case-response.png)
+![Backend pytest suite](images/testing/01-pytest-backend-suite.png)
 
-### `404` Error Handling
-Example of a missing-case lookup returning a structured `404` response instead of an internal server error.
+### Frontend Analyst Workflow
 
-![Case not found 404](images/errors/case-not-found-404.png)
+The frontend dashboard simulates an internal analyst console for reviewing verification cases, running deterministic fraud tools, viewing AI review decisions, and inspecting audit history.
 
-### Audit Logging
-Audit log query showing backend events, latency measurements, and structured metadata captured during case workflows.
+![Case queue](images/frontend/01-case-queue.png)
 
-![Audit logs table](images/database/audit-logs-table.png)
+![Case detail overview](images/frontend/02-case-detail-overview.png)
+
+![Deterministic tool results panel](images/frontend/03-tool-results-panel.png)
+
+![AI review approve example](images/frontend/04-ai-review-approve.png)
+
+![AI review escalate example](images/frontend/05-ai-review-escalate.png)
+
+![AI review reject example](images/frontend/06-ai-review-reject.png)
+
+![Audit timeline](images/frontend/07-audit-timeline.png)
+
+### API Workflow Evidence
+
+The FastAPI backend exposes versioned endpoints for case management, deterministic tool execution, AI review, persisted latest-state retrieval, and audit history.
+
+![Swagger overview](images/api/01-swagger-overview.png)
+
+![Run tools response](images/api/02-run-tools-response.png)
+
+![AI review response](images/api/04-ai-review-response.png)
+
+![Audit logs response](images/api/06-audit-logs-response.png)
+
+### Database Persistence Evidence
+
+PostgreSQL stores verification cases, deterministic tool runs, AI reviews, and audit logs so the system can reload workflow state after refresh or local service restart.
+
+![Cases table](images/database/01-cases-table.png)
+
+![Tool runs table](images/database/02-tool-runs-table.png)
+
+![AI reviews table](images/database/03-ai-reviews-table.png)
+
+![Audit logs table](images/database/04-audit-logs-table.png)
+
+### Architecture Evidence
+
+The README includes Mermaid diagrams for the overall system architecture and AI decision pipeline. These diagrams show how the frontend, FastAPI backend, PostgreSQL persistence layer, deterministic tooling, audit logging, and LangGraph AI review workflow fit together.
 
 ## AI Decision Engine (Agent Orchestration)
 
