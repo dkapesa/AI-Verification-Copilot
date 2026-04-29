@@ -17,6 +17,7 @@ The current implementation includes:
 
 - a working FastAPI backend
 - PostgreSQL persistence
+- targeted pytest coverage for API contracts, schema validation, deterministic tooling, mocked AI review workflows, persisted latest-state retrieval, and audit behavior
 - SQLAlchemy ORM models
 - Alembic migrations
 - paginated case APIs
@@ -468,31 +469,151 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 
 ## Demo Evidence
 
-### API Overview
-Swagger / OpenAPI overview of the current backend foundation, showing the core case management endpoints.
+The repository includes screenshot evidence for automated backend tests, frontend analyst workflows, API behavior, database persistence, and architecture diagrams. The screenshots are intended to show the system as a testable, inspectable workflow application rather than only a model-prompting demo.
+
+### Backend Test Suite
+
+Pytest coverage for FastAPI endpoints, structured errors, pagination, audit logging, deterministic tool execution, schema validation, service-layer tool orchestration, mocked AI review workflows, latest persisted-state retrieval, `APPROVE` / `ESCALATE` / `REJECT` scenarios, and AI review persistence/audit behavior without live OpenAI API calls.
+
+![Backend pytest suite](images/testing/pytest-backend-suite.png)
+
+---
+
+### Frontend Analyst Workflow
+
+The frontend dashboard simulates an internal analyst console for reviewing verification cases, running deterministic fraud tools, viewing AI review decisions, inspecting audit history, and seeing the human override path.
+
+#### Case Queue
+
+Internal analyst queue with persisted cases, status indicators, timestamps, search/filter controls, pagination, row count controls, and refresh behavior.
+
+![Case queue](images/frontend/01-case-queue.png)
+
+#### Case Detail Overview
+
+Structured case metadata, status, timestamps, device information, document check result, and behaviour summary for analyst review.
+
+![Case detail overview](images/frontend/02-case-detail-overview.png)
+
+#### Tool Results and AI Review
+
+Deterministic fraud tooling and AI review output shown together, including tool status, scores, confidence values, summaries, decision, reasons, recommended next steps, aggregated signals, and tool summaries.
+
+![Tool results and AI review](images/frontend/03-tools-and-ai-review.png)
+
+#### Audit Timeline
+
+Persisted case history showing workflow events, event counts, actor metadata, timestamps, latency, and event IDs.
+
+![Audit timeline](images/frontend/04-audit-timeline.png)
+
+#### Human Override Placeholder
+
+Human-in-the-loop placeholder workflow showing reviewer decision input, reviewer note capture, selected override state, and submit action.
+
+![Human override placeholder](images/frontend/05-human-override-placeholder.png)
+
+#### Case Detail Workflow Overview
+
+Full case detail workflow showing metadata, structured signals, deterministic tooling, AI review, human override placeholder, and audit timeline in one analyst-facing screen.
+
+![Case detail workflow overview](images/frontend/06-case-detail-workflow-overview.png)
+
+---
+
+### API Workflow Evidence
+
+The FastAPI backend exposes versioned endpoints for case management, deterministic fraud tool execution, AI review, latest-state retrieval, audit logs, and the current human override placeholder.
+
+#### Swagger / OpenAPI Overview
+
+OpenAPI documentation for the versioned FastAPI backend.
 
 ![Swagger overview](images/api/swagger-overview.png)
 
-### Successful Case Creation
-Example of successful case creation through the FastAPI API, returning a persisted verification case with a generated UUID, status, and timestamps.
+#### Case Creation
+
+Successful case creation through the API, returning a persisted verification case with UUID, status, and timestamps.
 
 ![Create case response](images/api/create-case-response.png)
 
-### `404` Error Handling
-Example of a missing-case lookup returning a structured `404` response instead of an internal server error.
+#### Case Listing
+
+Paginated case listing response with persisted case data and pagination metadata.
+
+![List cases response](images/api/list-cases-response.png)
+
+#### Structured Error Handling
+
+Missing-case lookup returning a structured `404` response.
 
 ![Case not found 404](images/errors/case-not-found-404.png)
 
-### Audit Logging
-Audit log query showing backend events, latency measurements, and structured metadata captured during case workflows.
+#### Deterministic Tool Execution
+
+Tool execution endpoint returning structured results from deterministic fraud tools.
+
+![Run tools response](images/api/run-tools-response.png)
+
+#### Latest Tool Results Retrieval
+
+Latest persisted tool results retrieved independently after execution.
+
+![Latest tool results response](images/api/latest-tool-results-response.png)
+
+#### AI Review Response
+
+AI review endpoint returning a structured decision, confidence, reasons, recommended next steps, aggregated signals, and tool summaries.
+
+![AI review response](images/api/ai-review-response.png)
+
+#### Latest AI Review Retrieval
+
+Latest persisted AI review retrieved independently after creation.
+
+![Latest AI review response](images/api/latest-ai-review-response.png)
+
+#### Audit Logs API
+
+Audit log response showing workflow events, metadata, model information, tool statuses, result counts, and latency metadata.
+
+![Audit logs response](images/api/audit-logs-response.png)
+
+---
+
+### Database Persistence Evidence
+
+PostgreSQL stores verification cases, deterministic tool runs, AI reviews, and audit logs so the system can reload workflow state after refresh or local service restart.
+
+#### Cases Table
+
+Persisted verification cases with UUIDs, user identifiers, status, and timestamps.
+
+![Cases table](images/database/cases-table.png)
+
+#### Tool Runs Table
+
+Persisted deterministic fraud tool results with tool names, statuses, scores, confidence values, summaries, and timestamps.
+
+![Tool runs table](images/database/tool-runs-table.png)
+
+#### AI Reviews Table
+
+Persisted AI review decisions with decision labels, confidence, retry metadata, model provider, model name, and timestamps.
+
+![AI reviews table](images/database/ai-reviews-table.png)
+
+#### Audit Logs Table
+
+Persisted workflow events with event types, actors, latency, metadata, and timestamps.
 
 ![Audit logs table](images/database/audit-logs-table.png)
 
-## AI Decision Engine (Agent Orchestration)
+---
 
-Phase 4 introduces an **AI decision engine** built with **LangGraph** that orchestrates deterministic fraud tools, aggregates structured signals, and produces validated, structured AI review outcomes.
+### Architecture Evidence
 
-Rather than calling a model directly, the system follows a multi-stage workflow designed to resemble the review flow used in internal fraud and verification platforms.
+The README includes Mermaid diagrams for the overall system architecture and AI decision pipeline. These diagrams show how the Next.js frontend, FastAPI backend, PostgreSQL persistence layer, deterministic tooling, audit logging, and LangGraph AI review workflow fit together.
 
 ---
 
