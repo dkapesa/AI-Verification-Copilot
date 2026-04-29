@@ -488,6 +488,12 @@ Audit log query showing backend events, latency measurements, and structured met
 
 ![Audit logs table](images/database/audit-logs-table.png)
 
+### Backend Test Suite
+
+Pytest output showing automated backend coverage across FastAPI endpoints, structured error handling, pagination, audit logging, deterministic tool execution, schema validation, mocked AI review workflows, latest persisted-state retrieval, `APPROVE` / `ESCALATE` / `REJECT` scenarios, and AI review persistence/audit behavior.
+
+![Backend pytest suite](docs/images/testing/pytest-backend-suite.png)
+
 ## AI Decision Engine (Agent Orchestration)
 
 Phase 4 introduces an **AI decision engine** built with **LangGraph** that orchestrates deterministic fraud tools, aggregates structured signals, and produces validated, structured AI review outcomes.
