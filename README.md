@@ -404,7 +404,7 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 
 **Project status:** Ongoing
 
-**Current phase:** Evaluation harness planning and post-dashboard hardening
+**Current phase:** Post-dashboard hardening, testing evidence, screenshot evidence, and portfolio packaging
 
 ### **Completed so far**
 
