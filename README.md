@@ -116,9 +116,56 @@ Automated tests currently cover:
 - `APPROVE`, `ESCALATE`, and `REJECT` workflow-style scenarios
 - latest persisted AI review retrieval
 - AI review persistence, retry metadata, model metadata, latency metadata, and completed/failed audit events
-- sanitized provider failure messages for authentication, rate limit, timeout, and connection errors
+- sanitised provider failure messages for authentication, rate limit, timeout, and connection errors
 
 The automated test suite avoids live OpenAI API calls by default. AI review behavior is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
+The latest captured local run shows `65 passed` tests.
+
+---
+
+## Demo evidence
+
+The repository includes screenshot evidence for automated tests, frontend workflows, API behavior, and database persistence.
+
+### Backend test suite
+
+Pytest coverage for API endpoints, schema validation, deterministic tool execution, mocked AI review workflows, latest persisted-state retrieval, decision scenarios, and AI review persistence/audit behavior.
+
+![Backend pytest suite](images/testing/pytest-backend-suite.png)
+
+### Frontend analyst workflow
+
+The dashboard simulates an internal analyst console for reviewing cases, running fraud tools, viewing AI decisions, inspecting audit history, and seeing the human override path.
+
+![Case queue](images/frontend/01-case-queue.png)
+
+![Tool results and AI review](images/frontend/03-tools-and-ai-review.png)
+
+![Audit timeline](images/frontend/04-audit-timeline.png)
+
+Additional frontend screenshots are available in `images/frontend/`.
+
+### API workflow evidence
+
+The FastAPI backend exposes endpoints for case management, deterministic tool execution, AI review, latest-state retrieval, audit logs, and the human override placeholder.
+
+![Swagger overview](images/api/swagger-overview.png)
+
+![AI review response](images/api/ai-review-response.png)
+
+![Audit logs response](images/api/audit-logs-response.png)
+
+Additional API screenshots are available in `images/api/` and `images/errors/`.
+
+### Database persistence evidence
+
+PostgreSQL persists verification cases, tool runs, AI reviews, and audit logs so workflow state can be reloaded after refresh or local service restart.
+
+![Tool runs table](images/database/tool-runs-table.png)
+
+![AI reviews table](images/database/ai-reviews-table.png)
+
+Additional database screenshots are available in `images/database/`.
 
 ---
 
@@ -427,52 +474,6 @@ In progress / planned:
 
 ---
 
-## Demo evidence
-
-The repository includes screenshot evidence for automated tests, frontend workflows, API behavior, and database persistence.
-
-### Backend test suite
-
-Pytest coverage for API endpoints, schema validation, deterministic tool execution, mocked AI review workflows, latest persisted-state retrieval, decision scenarios, and AI review persistence/audit behavior.
-
-![Backend pytest suite](images/testing/pytest-backend-suite.png)
-
-### Frontend analyst workflow
-
-The dashboard simulates an internal analyst console for reviewing cases, running fraud tools, viewing AI decisions, inspecting audit history, and seeing the human override path.
-
-![Case queue](images/frontend/01-case-queue.png)
-
-![Tool results and AI review](images/frontend/03-tools-and-ai-review.png)
-
-![Audit timeline](images/frontend/04-audit-timeline.png)
-
-Additional frontend screenshots are available in `images/frontend/`.
-
-### API workflow evidence
-
-The FastAPI backend exposes endpoints for case management, deterministic tool execution, AI review, latest-state retrieval, audit logs, and the human override placeholder.
-
-![Swagger overview](images/api/swagger-overview.png)
-
-![AI review response](images/api/ai-review-response.png)
-
-![Audit logs response](images/api/audit-logs-response.png)
-
-Additional API screenshots are available in `images/api/` and `images/errors/`.
-
-### Database persistence evidence
-
-PostgreSQL persists verification cases, tool runs, AI reviews, and audit logs so workflow state can be reloaded after refresh or local service restart.
-
-![Tool runs table](images/database/tool-runs-table.png)
-
-![AI reviews table](images/database/ai-reviews-table.png)
-
-Additional database screenshots are available in `images/database/`.
-
----
-
 ### Architecture Evidence
 
 The README includes Mermaid diagrams for the overall system architecture and AI decision pipeline. These diagrams show how the Next.js frontend, FastAPI backend, PostgreSQL persistence layer, deterministic tooling, audit logging, and LangGraph AI review workflow fit together.
@@ -530,149 +531,6 @@ L --> M
 
 M --> N[Return Decision via API]
 ```
----
-
-## Example AI Review Outcomes
-
-The system currently demonstrates three representative verification scenarios.
-
-Example case inputs and AI review outputs are available in the repository:
-
-[`backend/demo_cases/`](https://github.com/dkapesa/AI-Verification-Copilot/tree/master/backend/demo_cases)
-
-Each scenario includes:
-
-- the **case request payload** sent to the API
-- the **AI review response** returned by the decision engine
-
-Files included:
-
-- `approve_case_request.json`
-- `approve_ai_review.json`
-- `escalate_case_request.json`
-- `escalate_ai_review.json`
-- `reject_case_request.json`
-- `reject_ai_review.json`
-
-### **Low-Risk Approval**
-
-A case with:
-
-- valid document verification
-- no watchlist matches
-- low device risk
-- normal behavioural signals
-
-### **Decision**
-
-**Decision:** `APPROVE`  
-**Confidence:** `0.90`
-
-### **Reasoning**
-
-- Document verification passed with no fraud indicators
-- Low overall risk score
-- No moderate- or high-risk flags
-- All deterministic tools reported low risk
-
-### **Next Steps**
-
-- Proceed with account activation
-- Continue passive monitoring for unusual behaviour
-
----
-
-### **Mixed-Signal Escalation**
-
-A case containing:
-
-- emulator device signals
-- VPN / proxy detection
-- high automation behaviour patterns
-- repeated verification attempts
-
-### **Decision**
-
-**Decision:** `ESCALATE`  
-**Confidence:** `0.65`
-
-### **Reasoning**
-
-- High device risk based on multiple suspicious signals
-- Behavioural anomaly patterns consistent with automation
-- Repeated verification attempts suggest suspicious activity
-
-### **Next Steps**
-
-- Manual fraud analyst review
-- Additional identity verification
-- Account activity monitoring
-
----
-
-### **High-Risk Fraud Rejection**
-
-A case containing:
-
-- failed document verification
-- flagged user identifiers
-- disposable / blocked email
-- rooted emulator device
-- network obfuscation
-- automation-like behaviour patterns
-
-### **Decision**
-
-**Decision:** `REJECT`  
-**Confidence:** `0.99`
-
-### **Reasoning**
-
-- Document verification failed
-- Watchlist match detected
-- Multiple high-risk fraud indicators were present
-- Behaviour patterns strongly suggest automation
-
-### **Next Steps**
-
-- Block the account
-- Alert fraud operations
-- Record indicators for future detection
-
----
-
-### **Frontend Dashboard**
-
-- `/cases` — analyst case queue
-- `/cases/[id]` — case detail page
-- persisted case list rendering
-- search and pagination
-- deterministic tool results panel
-- AI review panel
-- audit timeline panel
-- human override placeholder panel
-
-### **Deterministic Risk Tooling**
-
-The system includes a modular tooling layer capable of executing multiple fraud detection tools in parallel.
-
-Currently implemented tools include:
-
-- `behaviour_anomaly_check`
-- `device_risk_check`
-- `rules_risk_score`
-- `watchlist_screening`
-
-Each tool returns structured results including:
-
-- risk score
-- confidence level
-- summary explanation
-
-The system uses a **tool registry pattern** to dynamically discover and execute tools without hardcoding them in API endpoints.
-
-Parallel execution allows the system to scale as new tools are added while keeping latency low.
-
 ---
 
 ### **Example Tool Execution Response**
@@ -863,7 +721,7 @@ The dashboard has been manually validated across all three decision paths:
 
 A restart / regression pass has also been completed to confirm that persisted tool runs, persisted AI reviews, and audit timeline history remain available after restarting Docker, the backend, and the frontend.
 
-Commonly used development test cases have included:
+Demo cases for `APPROVE`, `ESCALATE`, and `REJECT` are available in `backend/demo_cases/`.:
 
 - `0d908d7d-da04-4a51-8d0c-898fd3a3e2ba`
 - `8cd0afa4-5514-4c0a-a352-a9ed09fdfc21`
@@ -872,7 +730,7 @@ Commonly used development test cases have included:
 
 ---
 
-## Known Limitations / Technical Debt
+## Known limitations / Technical debt
 
 The project is working end to end, but several areas are intentionally still being hardened or extended:
 
