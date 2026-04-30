@@ -119,6 +119,7 @@ Automated tests currently cover:
 - sanitised provider failure messages for authentication, rate limit, timeout, and connection errors
 
 The automated test suite avoids live OpenAI API calls by default. AI review behavior is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
+
 The latest captured local run shows `65 passed` tests.
 
 ---
@@ -452,7 +453,7 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 ## Current status
 
 **Project status:** Ongoing  
-**Current phase:** Post-dashboard hardening, testing evidence, screenshot evidence, and portfolio packaging
+**Current phase:** Post-dashboard hardening, portfolio packaging, and evaluation harness planning
 
 Completed:
 
