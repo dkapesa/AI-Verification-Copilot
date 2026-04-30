@@ -344,6 +344,7 @@ For local development, the backend CORS configuration explicitly allows common l
 - `http://127.0.0.1:3001`
 
 This keeps local development flexible while avoiding wildcard CORS as the default.
+
 ---
 
 ## API endpoints
@@ -474,7 +475,7 @@ In progress / planned:
 
 ---
 
-### Architecture Evidence
+## Architecture diagrams
 
 The README includes Mermaid diagrams for the overall system architecture and AI decision pipeline. These diagrams show how the Next.js frontend, FastAPI backend, PostgreSQL persistence layer, deterministic tooling, audit logging, and LangGraph AI review workflow fit together.
 
@@ -533,171 +534,6 @@ M --> N[Return Decision via API]
 ```
 ---
 
-### **Example Tool Execution Response**
-
-Example response from:
-
-`POST /api/v1/cases/{case_id}/run-tools`
-
-```json
-{
-  "case_id":"2be4e5d8-c34a-47eb-90df-d4927e0316d2",
-  "results": [
-    {
-      "tool_name":"behaviour_anomaly_check",
-      "status":"SUCCESS",
-      "score":0,
-      "confidence":0.6,
-      "summary":"Low behavioural anomaly risk from available session data."
-    },
-    {
-      "tool_name":"device_risk_check",
-      "status":"SUCCESS",
-      "score":0,
-      "confidence":0.7,
-      "summary":"Low device risk."
-    },
-    {
-      "tool_name":"rules_risk_score",
-      "status":"SUCCESS",
-      "score":0,
-      "confidence":0.85,
-      "summary":"Low rules-based fraud risk from current structured signals."
-    },
-    {
-      "tool_name":"watchlist_screening",
-      "status":"SUCCESS",
-      "score":0,
-      "confidence":0.8,
-      "summary":"No matches found in watchlist screening."
-    }
-  ]
-}
-```
-
-### **Persistence & Data Modeling**
-
-- PostgreSQL database running locally in Docker
-- SQLAlchemy ORM models for:
-    - `cases`
-    - `audit_logs`
-    - `tool_runs`
-    - `ai_reviews`
-- Alembic migration-based schema management
-
-### **Reliability & Observability**
-
-- structured audit logging for key backend actions
-- latency tracking for selected API operations
-- pagination for list endpoints
-- proper `404` handling for missing cases
-- OpenAPI / Swagger docs for local testing
-- persisted audit trail for tool and AI workflows
-
-## Key Engineering Patterns
-
-This project intentionally demonstrates several backend and applied AI engineering patterns commonly used in production-minded systems:
-
-- **Layered Architecture**  
-  Separates API routing, validation, persistence, workflow logic, and tooling concerns.
-
-- **Registry Pattern**  
-  The tool registry allows new fraud detection tools to be added without modifying API endpoints.
-
-- **Service Layer Pattern**  
-  Tool execution and workflow logic are separated from the API layer to keep endpoints thinner and easier to maintain.
-
-- **Structured Tool Outputs**  
-  All tools return standardised result objects to simplify downstream aggregation, persistence, and analysis.
-
-- **Parallel Execution**  
-  Fraud tools run concurrently to reduce latency as the number of checks grows.
-
-- **Persistence-First Operational State**  
-  Tool results, AI reviews, and audit activity are persisted so the frontend can reload the latest operational state instead of depending only on in-memory or per-session browser state.
-
----
-
-### **Queue page**
-
-The `/cases` page currently supports:
-
-- persisted case loading from the backend
-- internal-style queue layout
-- case ID / email / user ID / status columns
-- created and updated timestamps
-- search and filter
-- pagination
-- rows-per-page selection
-- refresh action
-- improved density and interaction polish
-
-### **Case detail page**
-
-The `/cases/[id]` page currently supports:
-
-- polished case metadata header
-- created and updated timestamps in the header
-- device info rendering
-- document check result rendering
-- behaviour summary rendering
-- back-to-queue navigation
-- more structured rendering of simple top-level fields
-
-### **Deterministic Tool Results panel**
-
-The tool results panel currently supports:
-
-- on-demand tool execution
-- latest persisted tool result loading on refresh
-- status display
-- score display
-- confidence display
-- summary display
-- richer persisted details where available
-- expandable detail views for additional persisted tool output
-- loading and error handling
-
-### **AI Review panel**
-
-The AI review panel currently supports:
-
-- on-demand AI review execution
-- latest persisted AI review loading on refresh
-- decision rendering
-- confidence rendering
-- reasons
-- recommended next steps
-- aggregated signals
-- overall risk score
-- risk flag counts
-- risk flag lists
-- tool summaries
-- reasoning summary display when returned
-
-### **Audit timeline**
-
-The audit timeline currently supports:
-
-- persisted audit log retrieval
-- grouped event counts
-- event timeline rendering
-- case, tool, and AI workflow events
-- metadata rendering in a more analyst-friendly format
-- refresh action
-
-### **Human override panel**
-
-The human override panel currently supports:
-
-- visible human-in-the-loop workflow placeholder
-- reviewer decision input
-- reviewer note input
-- clearer placeholder workflow framing
-- submit action against the current stub endpoint
-
----
-
 ## Local Smoke Test
 
 A quick manual smoke test for the current dashboard:
@@ -725,7 +561,7 @@ Demo cases for `APPROVE`, `ESCALATE`, and `REJECT` are available in `backend/dem
 
 ---
 
-## Known limitations / Technical debt
+## Known limitations / technical debt
 
 The project is working end to end, but several areas are intentionally still being hardened or extended:
 
