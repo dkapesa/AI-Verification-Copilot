@@ -721,12 +721,7 @@ The dashboard has been manually validated across all three decision paths:
 
 A restart / regression pass has also been completed to confirm that persisted tool runs, persisted AI reviews, and audit timeline history remain available after restarting Docker, the backend, and the frontend.
 
-Demo cases for `APPROVE`, `ESCALATE`, and `REJECT` are available in `backend/demo_cases/`.:
-
-- `0d908d7d-da04-4a51-8d0c-898fd3a3e2ba`
-- `8cd0afa4-5514-4c0a-a352-a9ed09fdfc21`
-- `9a2a963a-5752-40d9-a117-3854ba7390f0`
-- `8f41eca5-4ab6-4c27-85aa-7d377d8116ce`
+Demo cases for `APPROVE`, `ESCALATE`, and `REJECT` are available in `backend/demo_cases/`.
 
 ---
 
