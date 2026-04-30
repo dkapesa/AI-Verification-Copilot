@@ -58,8 +58,6 @@ The current system includes:
 
 ---
 
----
-
 ## Architecture overview
 
 The system uses a layered architecture:
