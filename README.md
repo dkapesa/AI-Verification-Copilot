@@ -160,7 +160,7 @@ The repository includes screenshot evidence for automated tests, frontend workfl
 
 Pytest coverage for API endpoints, schema validation, deterministic tool execution, mocked AI review workflows, latest persisted-state retrieval, decision scenarios, and AI review persistence/audit behavior.
 
-![Backend pytest suite](images/testing/pytest-backend-suite.png)
+![Backend pytest suite](images/testing/pytest-backend-105-passed.png)
 
 ### Frontend analyst workflow
 
