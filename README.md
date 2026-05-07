@@ -32,7 +32,11 @@ This project is intentionally built to show production-minded engineering patter
 - LangGraph AI orchestration
 - structured AI decision outputs
 - audit logging with metadata and latency
-- pytest coverage for API, schema, service, workflow, and persistence behavior
+- lightweight learning-from-feedback evaluation harness
+- seeded policy comparison experiments
+- reward scoring and decision-quality metrics
+- JSON/CSV experiment outputs for reproducible evaluation
+- pytest coverage for API, schema, service, workflow, persistence, and evaluation behavior
 - Next.js analyst dashboard with persisted workflow state
 
 ## Current implementation
@@ -54,7 +58,7 @@ The current system includes:
 - case queue and case detail pages
 - tool results, AI review, audit timeline, and human override panels
 - pytest suite covering API contracts, schema validation, mocked AI review workflows, latest-state retrieval, and audit persistence
-- lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, seeded experiment runs, and policy comparison metrics
+- lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, seeded experiment runs, baseline/AI-review/feedback-adjusted policy comparison, and JSON/CSV experiment outputs
 - screenshot evidence for tests, API responses, database tables, and frontend workflows
 
 ---
@@ -71,6 +75,7 @@ The system uses a layered architecture:
 - **AI orchestration layer:** LangGraph aggregates deterministic signals and produces structured AI review decisions.
 - **Audit layer:** important workflow events are persisted with actor, metadata, timestamp, and latency fields.
 - **Frontend layer:** Next.js renders an internal analyst dashboard that reloads persisted workflow state.
+- **Evaluation layer:** synthetic cases, reward scoring, policy comparison, seeded experiment runs, and JSON/CSV outputs for measuring decision behavior.
 
 The frontend currently supports:
 
@@ -82,6 +87,8 @@ The frontend currently supports:
 - latest persisted AI review retrieval
 - audit timeline rendering
 - human override placeholder workflow
+
+The evaluation harness runs as a separate backend-side Python workflow. It does not depend on the live frontend or a live OpenAI call during tests. It uses synthetic cases and deterministic policy logic so experiments can be reproduced locally.
 
 ---
 
@@ -127,13 +134,13 @@ The latest captured local full backend run shows `105 passed` tests, including `
 
 ## Learning from Feedback Evaluation Harness
 
-This extension adds a lightweight evaluation harness for testing how fraud review policies perform when decisions receive synthetic outcome feedback.
+This extension adds a lightweight learning-from-feedback evaluation harness for testing how fraud review policies perform when decisions receive synthetic outcome feedback.
 
-The harness treats each synthetic verification case as an environment state, each review decision as an action, and downstream case outcome as a reward signal. It compares deterministic rules, an AI-review policy interface with deterministic offline fallback, and a feedback-adjusted policy using metrics such as accuracy, average reward, false approve rate, false reject rate, escalation rate, and decision distribution.
+The harness treats each synthetic verification case as an environment state, each review decision as an action, and the downstream case outcome as a reward signal. It compares deterministic rules, an AI-review policy interface with deterministic offline fallback, and a feedback-adjusted threshold policy using measurable decision-quality metrics.
 
-The feedback-adjusted policy is intentionally simple: it starts from deterministic thresholds and updates approval/rejection thresholds after observing reward feedback. This shows early learning-from-feedback thinking while keeping the implementation deterministic, inspectable, and testable.
+This phase extends the project beyond a single AI review workflow into a more serious applied AI systems artifact. It introduces evaluation design, policy comparison, feedback-loop awareness, reproducible experiments, reward scoring, and documented limitations.
 
-This is **not** intended to be a frontier reinforcement learning system. It is a small, reproducible experiment showing how decision workflows can be evaluated, stress-tested, and adjusted from outcome feedback over time.
+This is **not** intended to be a frontier reinforcement learning system. The dataset is synthetic, the feedback-adjusted policy is intentionally simple, and the purpose is to show how decision workflows can be evaluated, stress-tested, and adjusted from outcome feedback over time.
 
 Current harness components include:
 
@@ -150,6 +157,25 @@ Current harness components include:
 - pytest coverage for schemas, dataset loading, environment behavior, reward calculation, policy outputs, feedback updates, metrics, and experiment reproducibility
 
 Example seeded run results are documented in `backend/experiments/README.md`.
+
+### Seeded policy comparison
+
+The table below shows one small seeded synthetic run using:
+
+- episodes: `25`
+- seed: `42`
+- dataset: synthetic JSONL verification cases
+- sampling: cases sampled with replacement
+
+| Policy | Accuracy | Avg reward | False approve rate | False reject rate | Escalation rate |
+|---|---:|---:|---:|---:|---:|
+| Rules baseline | `0.84` | `0.70` | `0.00` | `0.16` | `0.12` |
+| AI-review fallback | `0.84` | `0.70` | `0.00` | `0.16` | `0.12` |
+| Feedback-adjusted | `0.96` | `0.82` | `0.00` | `0.04` | `0.24` |
+
+On this small synthetic seeded run, the feedback-adjusted policy improved average reward and reduced false rejects compared with the static rules baseline. It also increased the escalation rate, which is an expected trade-off in fraud and identity review systems where being more cautious can reduce incorrect rejections but increase manual review workload.
+
+The AI-review fallback matched the rules baseline in this run because it used deterministic offline fallback logic rather than live model calls or saved AI review outputs. This keeps the experiment reproducible and avoids requiring external provider credentials during evaluation.
 
 ---
 
@@ -613,15 +639,17 @@ The project is working end to end, but several areas are intentionally still bei
 - the human override workflow is still a placeholder and is not yet fully persisted end to end
 - `.env.example` files still need to be added
 - local developer onboarding can be improved further
-- the evaluation harness currently uses a small synthetic dataset and simple threshold adjustment rather than real fraud labels or a trained reinforcement learning policy
+- the evaluation harness currently uses a small synthetic dataset and simple threshold adjustment rather than real fraud labels, online learning, or a trained reinforcement learning policy
 
 ---
 
 ## Overall Architecture Diagram
 
-The system is designed as a full-stack internal review platform with a persisted backend workflow and an analyst-facing frontend dashboard.
+The system is designed as a full-stack internal review platform with a persisted backend workflow, an analyst-facing frontend dashboard, and a separate evaluation harness for policy comparison experiments.
 
 The frontend calls the FastAPI backend, which coordinates CRUD operations, deterministic fraud tooling, AI review orchestration, and audit logging. Operational state is persisted in PostgreSQL so the dashboard can reload the latest tool results, AI reviews, and audit history.
+
+The evaluation harness runs separately from the main application flow. It uses synthetic cases, deterministic reward scoring, policy runners, and JSON/CSV outputs to compare review-policy behavior in a reproducible way.
 
 ```mermaid
 flowchart TD
@@ -650,6 +678,14 @@ flowchart TD
     O --> G
 
     P[Alembic Migrations] --> G
+
+    Q[Synthetic Evaluation Dataset] --> R[Environment + Reward Function]
+    R --> S[Policy Runner]
+    S --> T[Metrics + JSON/CSV Outputs]
+    S --> U[Rules Policy]
+    S --> V[AI-Review Fallback Policy]
+    S --> W[Feedback-Adjusted Policy]
+    T --> X[Experiment Report]
 ```
 
 ## Future Direction
@@ -658,10 +694,12 @@ The next major improvements are likely to include:
 
 - expanded synthetic evaluation scenarios
 - multi-seed benchmarking and aggregate experiment reporting
+- evaluation of saved AI review outputs against expected outcomes
+- richer reward models for fraud loss, customer friction, and manual review workload
 - fuller human override persistence
 - additional frontend architecture cleanup
 - stronger onboarding documentation
 - `.env.example` support
 - deployment and portfolio packaging
 
-This project is intended to bring together backend engineering, applied AI systems design, and realistic internal-tool product thinking in a single end-to-end workflow.
+This project is intended to bring together backend engineering, applied AI systems design, realistic internal-tool product thinking, and early learning-from-feedback evaluation in a single end-to-end workflow.
