@@ -120,7 +120,35 @@ Automated tests currently cover:
 
 The automated test suite avoids live OpenAI API calls by default. AI review behavior is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
 
-The latest captured local run shows `65 passed` tests.
+The latest captured local full backend run shows `105 passed` tests, including `40 passed` tests for the evaluation harness.
+
+---
+
+## Learning from Feedback Evaluation Harness
+
+This extension adds a lightweight evaluation harness for testing how fraud review policies perform when decisions receive synthetic outcome feedback.
+
+The harness treats each synthetic verification case as an environment state, each review decision as an action, and downstream case outcome as a reward signal. It compares deterministic rules, an AI-review policy interface with deterministic offline fallback, and a feedback-adjusted policy using metrics such as accuracy, average reward, false approve rate, false reject rate, escalation rate, and decision distribution.
+
+The feedback-adjusted policy is intentionally simple: it starts from deterministic thresholds and updates approval/rejection thresholds after observing reward feedback. This shows early learning-from-feedback thinking while keeping the implementation deterministic, inspectable, and testable.
+
+This is **not** intended to be a frontier reinforcement learning system. It is a small, reproducible experiment showing how decision workflows can be evaluated, stress-tested, and adjusted from outcome feedback over time.
+
+Current harness components include:
+
+- synthetic JSONL evaluation dataset
+- environment/state/action/reward abstraction
+- deterministic reward function with asymmetric fraud-review costs
+- baseline rules policy
+- AI-review policy interface with offline deterministic fallback
+- feedback-adjusted threshold policy
+- seeded experiment runner
+- JSON and CSV experiment outputs
+- metrics for accuracy, average reward, false approvals, false rejections, escalation rate, and decision distribution
+- experiment report with assumptions, results, limitations, and next steps
+- pytest coverage for schemas, dataset loading, environment behavior, reward calculation, policy outputs, feedback updates, metrics, and experiment reproducibility
+
+Example seeded run results are documented in `backend/experiments/README.md`.
 
 ---
 
@@ -427,13 +455,22 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - [x] `APPROVE` / `ESCALATE` / `REJECT` workflow scenario tests
 - [x] AI review persistence and audit tests
 
-### **7) Evaluation harness**
+### **7) Learning from feedback evaluation harness**
 
-- [ ] Synthetic fraud dataset
-- [ ] Expected decision labels
-- [ ] Accuracy and decision metrics
-- [ ] Latency monitoring
-- [ ] Coverage analysis
+- [x] Synthetic fraud evaluation dataset
+- [x] Expected decision labels and synthetic outcome metadata
+- [x] Environment/state/action/reward abstraction
+- [x] Deterministic baseline policy
+- [x] AI-review policy interface with offline deterministic fallback
+- [x] Feedback-adjusted policy
+- [x] Seeded experiment runner
+- [x] JSON and CSV experiment outputs
+- [x] Metrics for accuracy, average reward, false approvals, false rejections, escalation rate, and decision distribution
+- [x] Experiment report and failure analysis
+- [x] Pytest coverage for schemas, environment, reward function, policies, metrics, and experiment runner
+- [ ] Larger synthetic scenario set
+- [ ] Multi-seed aggregate experiment report
+- [ ] Expanded benchmarking and coverage analysis
 
 ### **8) Production-minded polish**
 
@@ -453,7 +490,7 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 ## Current status
 
 **Project status:** Ongoing  
-**Current phase:** Post-dashboard hardening, portfolio packaging, and evaluation harness planning
+**Current phase:** Post-dashboard hardening, portfolio packaging, and evaluation harness expansion
 
 Completed:
 
@@ -464,10 +501,11 @@ Completed:
 - Next.js analyst dashboard with case queue, case detail, tool results, AI review, audit timeline, and human override placeholder
 - pytest coverage for API contracts, schema validation, deterministic tooling, mocked AI review workflows, persistence, and audit behavior
 - screenshot evidence for tests, API responses, database tables, and frontend workflows
+- lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, baseline/AI-review/feedback-adjusted policies, seeded experiment outputs, and pytest coverage
 
 In progress / planned:
 
-- synthetic evaluation harness
+- larger synthetic evaluation scenarios and multi-seed experiment reporting
 - fuller human override persistence
 - tighter frontend/backend response-shape alignment
 - `.env.example` files
@@ -574,7 +612,7 @@ The project is working end to end, but several areas are intentionally still bei
 - the human override workflow is still a placeholder and is not yet fully persisted end to end
 - `.env.example` files still need to be added
 - local developer onboarding can be improved further
-- the evaluation harness and benchmarking workflow are the next major phase
+- the evaluation harness currently uses a small synthetic dataset and simple threshold adjustment rather than real fraud labels or a trained reinforcement learning policy
 
 ---
 
@@ -617,8 +655,8 @@ flowchart TD
 
 The next major improvements are likely to include:
 
-- a synthetic evaluation harness
-- expected decision labels and benchmarking
+- expanded synthetic evaluation scenarios
+- multi-seed benchmarking and aggregate experiment reporting
 - fuller human override persistence
 - additional frontend architecture cleanup
 - stronger onboarding documentation
