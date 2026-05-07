@@ -2,7 +2,7 @@
 
 **AI Verification Copilot** is a full-stack internal fraud triage and decisioning system that simulates how identity verification, fraud operations, and trust & safety teams review suspicious verification cases.
 
-The project is designed to demonstrate **backend engineering, applied AI systems engineering, persistence, auditability, testing, and internal-tool product thinking**. It is not just a model prompt demo, it is a testable workflow system with API contracts, deterministic tools, persisted state, structured AI outputs, and analyst-facing UI evidence.
+The project is designed to demonstrate **backend engineering, applied AI systems engineering, persistence, auditability, testing, and internal-tool product thinking**. It is not just a model prompt demo; it is a testable workflow system with API contracts, deterministic tools, persisted state, structured AI outputs, and analyst-facing UI evidence.
 
 ## Project at a glance
 
@@ -54,6 +54,7 @@ The current system includes:
 - case queue and case detail pages
 - tool results, AI review, audit timeline, and human override panels
 - pytest suite covering API contracts, schema validation, mocked AI review workflows, latest-state retrieval, and audit persistence
+- lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, seeded experiment runs, and policy comparison metrics
 - screenshot evidence for tests, API responses, database tables, and frontend workflows
 
 ---
