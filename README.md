@@ -188,11 +188,11 @@ The repository includes screenshot evidence for automated tests, frontend workfl
 
 Pytest coverage for API endpoints, schema validation, deterministic tool execution, mocked AI review workflows, latest persisted-state retrieval, decision scenarios, and AI review persistence/audit behavior.
 
-![Backend pytest suite](images/testing/pytest-backend-105-passed.png)
+![Backend pytest suite](images/testing/pytest-backend-114-passed.png)
 
 ### Frontend analyst workflow
 
-The dashboard simulates an internal analyst console for reviewing cases, running fraud tools, viewing AI decisions, inspecting audit history, and seeing the human override path.
+The dashboard simulates an internal analyst console for reviewing cases, running fraud tools, viewing AI decisions, submitting persisted human overrides, and inspecting audit history.
 
 ![Case queue](images/frontend/01-case-queue.png)
 
@@ -200,11 +200,13 @@ The dashboard simulates an internal analyst console for reviewing cases, running
 
 ![Audit timeline](images/frontend/04-audit-timeline.png)
 
+![Persisted human override workflow](images/frontend/07-human-override-persisted.png)
+
 Additional frontend screenshots are available in `images/frontend/`.
 
 ### API workflow evidence
 
-The FastAPI backend exposes endpoints for case management, deterministic tool execution, AI review, latest-state retrieval, audit logs, and the human override placeholder.
+The FastAPI backend exposes endpoints for case management, deterministic tool execution, AI review, latest-state retrieval, audit logs, and persisted human override workflows.
 
 ![Swagger overview](images/api/swagger-overview.png)
 
