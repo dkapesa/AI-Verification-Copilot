@@ -120,12 +120,23 @@ The backend includes a targeted pytest suite covering API behavior, schema valid
 
 Automated tests currently cover:
 
+- case creation, retrieval, pagination, and structured `404` responses
+- audit log retrieval and audit event creation
+- deterministic tool execution and latest persisted tool result retrieval
+- tool registry behavior and service-layer orchestration
+- Pydantic validation for tool and AI review outputs
+- mocked AI review endpoint behavior without live OpenAI calls
+- `APPROVE`, `ESCALATE`, and `REJECT` workflow-style scenarios
+- latest persisted AI review retrieval
+- AI review persistence, retry metadata, model metadata, latency metadata, and completed/failed audit events
+- sanitised provider failure messages for authentication, rate limit, timeout, and connection errors
 - human override creation with persisted reviewer decision and required reason
 - latest persisted human override retrieval
 - invalid human override decision validation
 - missing override and missing case handling
 - `HUMAN_OVERRIDE_CREATED` audit event creation
 - original AI decision capture when a human override follows an AI review
+- evaluation harness behavior, including dataset loading, reward calculation, policy outputs, feedback updates, metrics, and experiment reproducibility
 
 The automated test suite avoids live OpenAI API calls by default. AI review behavior is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
 
@@ -381,7 +392,7 @@ The backend should be available at:
 
 ### **3) Start the frontend**
 
-From the `frontend/` folder:
+From the `frontend/frontend/` folder:
 
 ```bash
 npm run dev
@@ -399,10 +410,13 @@ Set the following local frontend environment variable:
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 ```
 
+to:
+
+```md
 Place it in:
 
 ```bash
-frontend/.env.local
+frontend/frontend/.env.local
 ```
 
 ### **Local CORS note**
@@ -657,7 +671,6 @@ The project is working end to end, but several areas are intentionally still bei
 - audit event grouping and collapsing can be refined further for very long timelines
 - the human override workflow is now persisted, but reviewer identity, role-based permissions, and multi-step approval flows are not yet implemented
 - local environment examples have been added, but onboarding documentation can still be improved further
-- local developer onboarding can be improved further
 - the evaluation harness currently uses a small synthetic dataset and simple threshold adjustment rather than real fraud labels, online learning, or a trained reinforcement learning policy
 
 ---
