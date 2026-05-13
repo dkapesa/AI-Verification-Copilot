@@ -431,7 +431,8 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - `POST /api/v1/cases/{case_id}/ai-review` — run the AI review workflow
 - `GET /api/v1/cases/{case_id}/ai-reviews/latest` — retrieve latest persisted AI review
 - `GET /api/v1/cases/{case_id}/audit-logs` — retrieve audit history
-- `POST /api/v1/cases/{case_id}/human-override` — current human override placeholder
+- `POST /api/v1/cases/{case_id}/human-override` — persist a human override decision with a required reviewer reason
+- `GET /api/v1/cases/{case_id}/human-overrides/latest` — retrieve the latest persisted human override for a case
 
 ---
 
@@ -474,14 +475,14 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - [x] Deterministic tool outputs
 - [x] AI review panel
 - [x] Audit timeline
-- [x] Human override placeholder workflow
+- [x] Human override workflow
 - [x] UI polish and reusable primitives
 - [x] Persisted operational state loading on refresh
 - [x] Local API configuration cleanup
 - [x] Local CORS tightening
 - [x] `APPROVE` / `ESCALATE` / `REJECT` paths verified through the UI
 - [x] Restart / regression pass completed
-- [ ] Full human override persistence
+- [x] Full human override persistence
 - [ ] Additional mobile / tablet UX refinement
 
 ### **6) Testing and validation**
@@ -494,6 +495,7 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - [x] mocked AI review endpoint tests without live OpenAI calls
 - [x] `APPROVE` / `ESCALATE` / `REJECT` workflow scenario tests
 - [x] AI review persistence and audit tests
+- [x] human override persistence and audit tests
 
 ### **7) Learning from feedback evaluation harness**
 
@@ -514,8 +516,10 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 
 ### **8) Production-minded polish**
 
-- [ ] Full Docker Compose stack
-- [ ] `.env.example`
+- [x] Docker Compose support for local PostgreSQL
+- [x] Backend `.env.example`
+- [x] Frontend `.env.example`
+- [x] Improved local test setup with `TEST_DATABASE_URL`
 - [ ] Logging improvements
 - [ ] Better developer onboarding
 
@@ -535,20 +539,21 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 Completed:
 
 - FastAPI backend with versioned case, tool, AI review, audit log, and human override endpoints
-- PostgreSQL persistence for cases, tool runs, AI reviews, and audit logs
+- PostgreSQL persistence for cases, tool runs, AI reviews, human overrides, and audit logs
 - deterministic fraud tooling with registry-based parallel execution
 - LangGraph AI review workflow with structured decisions and persistence
-- Next.js analyst dashboard with case queue, case detail, tool results, AI review, audit timeline, and human override placeholder
-- pytest coverage for API contracts, schema validation, deterministic tooling, mocked AI review workflows, persistence, and audit behavior
-- screenshot evidence for tests, API responses, database tables, and frontend workflows
+- persisted human override workflow with reviewer decision, required reason, latest override retrieval, frontend reload behavior, and `HUMAN_OVERRIDE_CREATED` audit logging
+- Next.js analyst dashboard with case queue, case detail, tool results, AI review, audit timeline, and persisted human override panel
+- pytest coverage for API contracts, schema validation, deterministic tooling, mocked AI review workflows, persistence, human override behavior, audit behavior, and evaluation harness behavior
+- screenshot evidence for tests, API responses, database tables, frontend workflows, and persisted human override behavior
 - lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, baseline/AI-review/feedback-adjusted policies, seeded experiment outputs, and pytest coverage
+- local reproducibility improvements including Docker Compose PostgreSQL setup, backend/frontend environment examples, and test database configuration
 
 In progress / planned:
 
 - larger synthetic evaluation scenarios and multi-seed experiment reporting
-- fuller human override persistence
+- human override UX refinements and optional reviewer identity metadata
 - tighter frontend/backend response-shape alignment
-- `.env.example` files
 - onboarding documentation polish
 - deployment planning
 
@@ -615,18 +620,17 @@ M --> N[Return Decision via API]
 
 ## Local Smoke Test
 
-A quick manual smoke test for the current dashboard:
+After starting Docker, the backend, and the frontend:
 
-1. Start Docker PostgreSQL
-2. Start the backend
-3. Start the frontend
-4. Open `/cases`
-5. Open a case detail page
-6. Run deterministic tools
-7. Run AI review
-8. Refresh the page and confirm the latest persisted tool results still appear
-9. Refresh the page and confirm the latest persisted AI review still appears
-10. Refresh the audit timeline and confirm recent activity is shown
+1. Open /cases
+2. Open a case detail page
+3. Run deterministic tools
+4. Run AI review
+5. Submit a human override with a required reason
+6. Refresh the page and confirm the latest persisted tool results still appear
+7. Refresh the page and confirm the latest persisted AI review still appears
+8. Refresh the page and confirm the latest persisted human override still appears
+9. Refresh the audit timeline and confirm recent case, tool, AI review, and human override events are shown
 
 The dashboard has been manually validated across all three decision paths:
 
@@ -649,8 +653,8 @@ The project is working end to end, but several areas are intentionally still bei
 - mobile and tablet support for the queue can be improved further
 - nested JSON rendering can become more analyst-friendly over time
 - audit event grouping and collapsing can be refined further for very long timelines
-- the human override workflow is still a placeholder and is not yet fully persisted end to end
-- `.env.example` files still need to be added
+- the human override workflow is now persisted, but reviewer identity, role-based permissions, and multi-step approval flows are not yet implemented
+- local environment examples have been added, but onboarding documentation can still be improved further
 - local developer onboarding can be improved further
 - the evaluation harness currently uses a small synthetic dataset and simple threshold adjustment rather than real fraud labels, online learning, or a trained reinforcement learning policy
 
@@ -709,10 +713,9 @@ The next major improvements are likely to include:
 - multi-seed benchmarking and aggregate experiment reporting
 - evaluation of saved AI review outputs against expected outcomes
 - richer reward models for fraud loss, customer friction, and manual review workload
-- fuller human override persistence
+- reviewer identity metadata and role-based human override permissions
 - additional frontend architecture cleanup
 - stronger onboarding documentation
-- `.env.example` support
 - deployment and portfolio packaging
 
-This project is intended to bring together backend engineering, applied AI systems design, realistic internal-tool product thinking, and early learning-from-feedback evaluation in a single end-to-end workflow.
+This project is intended to bring together backend engineering, applied AI systems design, realistic internal-tool product thinking, human-in-the-loop decisioning, and early learning-from-feedback evaluation in a single end-to-end workflow.
