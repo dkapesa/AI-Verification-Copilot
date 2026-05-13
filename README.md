@@ -16,7 +16,8 @@ AI Verification Copilot allows an analyst to:
 - inspect structured `APPROVE`, `ESCALATE`, or `REJECT` decisions
 - reload latest persisted tool results and AI reviews
 - view an audit timeline
-- see a human override placeholder workflow
+- submit a persisted human override with a required reviewer reason
+- reload the latest persisted human override after refresh
 
 ## What this demonstrates
 
@@ -28,15 +29,16 @@ This project is intentionally built to show production-minded engineering patter
 - Pydantic request / response validation
 - deterministic fraud tooling with a registry pattern
 - parallel async tool execution
-- persisted tool runs and AI reviews
+- persisted tool runs, AI reviews, human overrides, and audit logs
 - LangGraph AI orchestration
 - structured AI decision outputs
+- human-in-the-loop override persistence
 - audit logging with metadata and latency
 - lightweight learning-from-feedback evaluation harness
 - seeded policy comparison experiments
 - reward scoring and decision-quality metrics
 - JSON/CSV experiment outputs for reproducible evaluation
-- pytest coverage for API, schema, service, workflow, persistence, and evaluation behavior
+- pytest coverage for API, schema, service, workflow, persistence, human override, and evaluation behavior
 - Next.js analyst dashboard with persisted workflow state
 
 ## Current implementation
@@ -56,9 +58,10 @@ The current system includes:
 - latency metadata
 - Next.js / TypeScript / Tailwind dashboard
 - case queue and case detail pages
-- tool results, AI review, audit timeline, and human override panels
-- pytest suite covering API contracts, schema validation, mocked AI review workflows, latest-state retrieval, and audit persistence
+- tool results, AI review, audit timeline, and persisted human override panels
+- pytest suite covering API contracts, schema validation, mocked AI review workflows, latest-state retrieval, human override persistence, audit logging, and evaluation harness behaviour
 - lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, seeded experiment runs, baseline/AI-review/feedback-adjusted policy comparison, and JSON/CSV experiment outputs
+- persisted human override workflow with reviewer decision, required reason, latest override retrieval, PostgreSQL persistence, frontend reload behavior, and `HUMAN_OVERRIDE_CREATED` audit logging
 - screenshot evidence for tests, API responses, database tables, and frontend workflows
 
 ---
@@ -69,11 +72,11 @@ The system uses a layered architecture:
 
 - **API layer:** FastAPI exposes versioned REST endpoints and OpenAPI documentation.
 - **Schema layer:** Pydantic validates request and response contracts.
-- **Persistence layer:** SQLAlchemy maps cases, tool runs, AI reviews, and audit logs to PostgreSQL.
+- **Persistence layer:** SQLAlchemy maps cases, tool runs, AI reviews, human overrides, and audit logs to PostgreSQL.
 - **Migration layer:** Alembic tracks database schema changes.
 - **Tooling layer:** deterministic fraud tools run through a registry and return structured outputs.
 - **AI orchestration layer:** LangGraph aggregates deterministic signals and produces structured AI review decisions.
-- **Audit layer:** important workflow events are persisted with actor, metadata, timestamp, and latency fields.
+- **Audit layer:** important workflow events are persisted with actor, metadata, timestamp, and latency fields, including human override events.
 - **Frontend layer:** Next.js renders an internal analyst dashboard that reloads persisted workflow state.
 - **Evaluation layer:** synthetic cases, reward scoring, policy comparison, seeded experiment runs, and JSON/CSV outputs for measuring decision behavior.
 
@@ -86,7 +89,7 @@ The frontend currently supports:
 - AI review execution
 - latest persisted AI review retrieval
 - audit timeline rendering
-- human override placeholder workflow
+- persisted human override workflow with latest override reload
 
 The evaluation harness runs as a separate backend-side Python workflow. It does not depend on the live frontend or a live OpenAI call during tests. It uses synthetic cases and deterministic policy logic so experiments can be reproduced locally.
 
@@ -102,10 +105,12 @@ The evaluation harness runs as a separate backend-side Python workflow. It does 
 6. LangGraph runs the AI review workflow.
 7. The AI review produces a structured `APPROVE`, `ESCALATE`, or `REJECT` decision.
 8. The decision is persisted in the `ai_reviews` table.
-9. Audit events are written for case, tool, and AI workflow actions.
-10. The frontend reloads latest persisted tool results, AI reviews, and audit history.
+9. A human reviewer can submit a persisted override decision with a required reason.
+10. Human overrides are stored in the `human_overrides` table and can be reloaded after refresh.
+11. Audit events are written for case, tool, AI review, and human override actions.
+12. The frontend reloads latest persisted tool results, AI reviews, human overrides, and audit history.
 
-This workflow is designed to resemble internal trust & safety and identity verification systems where deterministic checks, model-assisted review, persistence, and auditability all operate together.
+This workflow is designed to resemble internal trust & safety and identity verification systems where deterministic checks, model-assisted review, human review, persistence, and auditability all operate together.
 
 ---
 
@@ -115,20 +120,16 @@ The backend includes a targeted pytest suite covering API behavior, schema valid
 
 Automated tests currently cover:
 
-- case creation, retrieval, pagination, and structured `404` responses
-- audit log retrieval and audit event creation
-- deterministic tool execution and latest persisted tool result retrieval
-- tool registry behavior and service-layer orchestration
-- Pydantic validation for tool and AI review outputs
-- mocked AI review endpoint behavior without live OpenAI calls
-- `APPROVE`, `ESCALATE`, and `REJECT` workflow-style scenarios
-- latest persisted AI review retrieval
-- AI review persistence, retry metadata, model metadata, latency metadata, and completed/failed audit events
-- sanitised provider failure messages for authentication, rate limit, timeout, and connection errors
+- human override creation with persisted reviewer decision and required reason
+- latest persisted human override retrieval
+- invalid human override decision validation
+- missing override and missing case handling
+- `HUMAN_OVERRIDE_CREATED` audit event creation
+- original AI decision capture when a human override follows an AI review
 
 The automated test suite avoids live OpenAI API calls by default. AI review behavior is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
 
-The latest captured local full backend run shows `105 passed` tests, including `40 passed` tests for the evaluation harness.
+The latest captured local full backend run shows `114 passed` tests, including `40 passed` tests for the evaluation harness and dedicated tests for persisted human override behavior.
 
 ---
 
@@ -215,7 +216,7 @@ Additional API screenshots are available in `images/api/` and `images/errors/`.
 
 ### Database persistence evidence
 
-PostgreSQL persists verification cases, tool runs, AI reviews, and audit logs so workflow state can be reloaded after refresh or local service restart.
+PostgreSQL persists verification cases, tool runs, AI reviews, human overrides, and audit logs so workflow state can be reloaded after refresh or local service restart.
 
 ![Tool runs table](images/database/tool-runs-table.png)
 
@@ -242,6 +243,20 @@ Fields include:
 - `status`
 - `created_at`
 - `updated_at`
+
+### **`human_overrides`**
+
+Stores human reviewer override decisions submitted after automated or AI-assisted review.
+
+Fields include:
+
+- `id` (UUID)
+- `case_id`
+- `decision`
+- `reason`
+- `actor_type`
+- `original_ai_decision`
+- `created_at`
 
 ### **`audit_logs`**
 
@@ -341,14 +356,12 @@ Fields include:
 - Git
 - VS Code recommended
 
-### **Startup sequence**
+### **1) Start PostgreSQL with Docker Compose**
 
-Start the local stack in the following order.
-
-### **1) Start PostgreSQL**
+From the project root:
 
 ```bash
-docker start ai_copilot_postgres
+docker compose up -d
 ```
 
 ### **2) Start the backend**
