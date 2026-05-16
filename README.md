@@ -24,7 +24,7 @@ The strongest parts of the project to inspect are:
 - LangGraph AI review workflow with structured decisions
 - persisted human-in-the-loop override workflow
 - lightweight learning-from-feedback evaluation harness with synthetic policy comparison experiments
-- backend test suite covering API, AI review, human override, audit, persistence, and evaluation behavior
+- backend test suite covering API, AI review, human override, audit, persistence, and evaluation behaviour
 
 ## Project at a glance
 
@@ -60,7 +60,7 @@ This project is intentionally built to show production-minded engineering patter
 - seeded policy comparison experiments
 - reward scoring and decision-quality metrics
 - JSON/CSV experiment outputs for reproducible evaluation
-- pytest coverage for API, schema, service, workflow, persistence, human override, and evaluation behavior
+- pytest coverage for API, schema, service, workflow, persistence, human override, and evaluation behaviour
 - Next.js analyst dashboard with persisted workflow state
 
 ## Current implementation
@@ -83,7 +83,7 @@ The current system includes:
 - tool results, AI review, audit timeline, and persisted human override panels
 - pytest suite covering API contracts, schema validation, mocked AI review workflows, latest-state retrieval, human override persistence, audit logging, and evaluation harness behaviour
 - lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, seeded experiment runs, baseline/AI-review/feedback-adjusted policy comparison, and JSON/CSV experiment outputs
-- persisted human override workflow with reviewer decision, required reason, latest override retrieval, PostgreSQL persistence, frontend reload behavior, and `HUMAN_OVERRIDE_CREATED` audit logging
+- persisted human override workflow with reviewer decision, required reason, latest override retrieval, PostgreSQL persistence, frontend reload behaviour, and `HUMAN_OVERRIDE_CREATED` audit logging
 - screenshot evidence for tests, API responses, database tables, and frontend workflows
 
 ---
@@ -100,7 +100,7 @@ The system uses a layered architecture:
 - **AI orchestration layer:** LangGraph aggregates deterministic signals and produces structured AI review decisions.
 - **Audit layer:** important workflow events are persisted with actor, metadata, timestamp, and latency fields, including human override events.
 - **Frontend layer:** Next.js renders an internal analyst dashboard that reloads persisted workflow state.
-- **Evaluation layer:** synthetic cases, reward scoring, policy comparison, seeded experiment runs, and JSON/CSV outputs for measuring decision behavior.
+- **Evaluation layer:** synthetic cases, reward scoring, policy comparison, seeded experiment runs, and JSON/CSV outputs for measuring decision behaviour.
 
 The frontend currently supports:
 
@@ -138,16 +138,16 @@ This workflow is designed to resemble internal trust & safety and identity verif
 
 ## Testing and validation
 
-The backend includes a targeted pytest suite covering API behavior, schema validation, deterministic tooling, mocked AI review workflows, persistence, and audit logging.
+The backend includes a targeted pytest suite covering API behaviour, schema validation, deterministic tooling, mocked AI review workflows, persistence, and audit logging.
 
 Automated tests currently cover:
 
 - case creation, retrieval, pagination, and structured `404` responses
 - audit log retrieval and audit event creation
 - deterministic tool execution and latest persisted tool result retrieval
-- tool registry behavior and service-layer orchestration
+- tool registry behaviour and service-layer orchestration
 - Pydantic validation for tool and AI review outputs
-- mocked AI review endpoint behavior without live OpenAI calls
+- mocked AI review endpoint behaviour without live OpenAI calls
 - `APPROVE`, `ESCALATE`, and `REJECT` workflow-style scenarios
 - latest persisted AI review retrieval
 - AI review persistence, retry metadata, model metadata, latency metadata, and completed/failed audit events
@@ -158,9 +158,9 @@ Automated tests currently cover:
 - missing override and missing case handling
 - `HUMAN_OVERRIDE_CREATED` audit event creation
 - original AI decision capture when a human override follows an AI review
-- evaluation harness behavior, including dataset loading, reward calculation, policy outputs, feedback updates, metrics, and experiment reproducibility
+- evaluation harness behaviour, including dataset loading, reward calculation, policy outputs, feedback updates, metrics, and experiment reproducibility
 
-The automated test suite avoids live OpenAI API calls by default. AI review behavior is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
+The automated test suite avoids live OpenAI API calls by default. AI review behaviour is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
 
 ### Run backend tests
 
@@ -204,7 +204,7 @@ Evaluation outputs are written to:
 backend/experiments/runs/
 ```
 
-The latest captured local full backend run shows `121 passed, 1 warning`, including `47 passed` tests for the evaluation harness and dedicated tests for persisted human override behavior.
+The latest captured local full backend run shows `121 passed, 1 warning`, including `47 passed` tests for the evaluation harness and dedicated tests for persisted human override behaviour.
 
 ---
 
@@ -226,7 +226,7 @@ Current harness components include:
 - aggregate policy metrics across deterministic seeds
 - metrics for accuracy, average reward, false approvals, false rejections, escalation rate, and decision distribution
 - experiment report with assumptions, results, limitations, trade-offs, and next steps
-- pytest coverage for schemas, dataset loading, environment behavior, reward calculation, policy outputs, feedback updates, metrics, experiment reproducibility, and the multi-seed runner
+- pytest coverage for schemas, dataset loading, environment behaviour, reward calculation, policy outputs, feedback updates, metrics, experiment reproducibility, and the multi-seed runner
 
 Example seeded run results are documented in `backend/experiments/README.md`.
 
@@ -281,11 +281,11 @@ The full evaluation report is documented in `backend/experiments/README.md`.
 
 ## Demo evidence
 
-The repository includes screenshot evidence for automated tests, frontend workflows, API behavior, and database persistence.
+The repository includes screenshot evidence for automated tests, frontend workflows, API behaviour, and database persistence.
 
 ### Backend test suite
 
-Pytest coverage for API endpoints, schema validation, deterministic tool execution, mocked AI review workflows, latest persisted-state retrieval, decision scenarios, and AI review persistence/audit behavior.
+Pytest coverage for API endpoints, schema validation, deterministic tool execution, mocked AI review workflows, latest persisted-state retrieval, decision scenarios, and AI review persistence/audit behaviour.
 
 ![Backend pytest suite](images/testing/pytest-backend-121-passed.png)
 
@@ -646,10 +646,10 @@ Completed:
 - PostgreSQL persistence for cases, tool runs, AI reviews, human overrides, and audit logs
 - deterministic fraud tooling with registry-based parallel execution
 - LangGraph AI review workflow with structured decisions and persistence
-- persisted human override workflow with reviewer decision, required reason, latest override retrieval, frontend reload behavior, and `HUMAN_OVERRIDE_CREATED` audit logging
+- persisted human override workflow with reviewer decision, required reason, latest override retrieval, frontend reload behaviour, and `HUMAN_OVERRIDE_CREATED` audit logging
 - Next.js analyst dashboard with case queue, case detail, tool results, AI review, audit timeline, and persisted human override panel
-- pytest coverage for API contracts, schema validation, deterministic tooling, mocked AI review workflows, persistence, human override behavior, audit behavior, and evaluation harness behavior
-- screenshot evidence for tests, API responses, database tables, frontend workflows, and persisted human override behavior
+- pytest coverage for API contracts, schema validation, deterministic tooling, mocked AI review workflows, persistence, human override behaviour, audit behaviour, and evaluation harness behaviour
+- screenshot evidence for tests, API responses, database tables, frontend workflows, and persisted human override behaviour
 - lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, baseline/AI-review/feedback-adjusted policies, seeded and multi-seed experiment outputs, aggregate policy metrics, JSON/CSV reports, and pytest coverage
 - local reproducibility improvements including Docker Compose PostgreSQL setup, backend/frontend environment examples, and test database configuration
 
@@ -769,7 +769,7 @@ The system is designed as a full-stack internal review platform with a persisted
 
 The frontend calls the FastAPI backend, which coordinates CRUD operations, deterministic fraud tooling, AI review orchestration, and audit logging. Operational state is persisted in PostgreSQL so the dashboard can reload the latest tool results, AI reviews, and audit history.
 
-The evaluation harness runs separately from the main application flow. It uses synthetic cases, deterministic reward scoring, policy runners, and JSON/CSV outputs to compare review-policy behavior in a reproducible way.
+The evaluation harness runs separately from the main application flow. It uses synthetic cases, deterministic reward scoring, policy runners, and JSON/CSV outputs to compare review-policy behaviour in a reproducible way.
 
 ```mermaid
 flowchart TD
