@@ -1,8 +1,30 @@
-# AI Verification Copilot
+﻿# AI Verification Copilot
 
 **AI Verification Copilot** is a full-stack internal fraud triage and decisioning system that simulates how identity verification, fraud operations, and trust & safety teams review suspicious verification cases.
 
 The project is designed to demonstrate **backend engineering, applied AI systems engineering, persistence, auditability, testing, and internal-tool product thinking**. It is not just a model prompt demo; it is a testable workflow system with API contracts, deterministic tools, persisted state, structured AI outputs, and analyst-facing UI evidence.
+
+## Reviewer quickstart
+
+If you only have a few minutes, start here:
+
+1. Read the project overview and system workflow.
+2. View frontend screenshots in `images/frontend/`.
+3. View API screenshots in `images/api/`.
+4. View database persistence screenshots in `images/database/`.
+5. Review backend test evidence in `images/testing/`.
+6. Read `backend/experiments/README.md` for the learning-from-feedback evaluation report.
+7. Run the backend test suite with `pytest`.
+8. Run the local smoke test: create a case, run deterministic tools, run AI review, submit a human override, refresh, and confirm persisted state reloads.
+
+The strongest parts of the project to inspect are:
+
+- persisted review state across cases, tool runs, AI reviews, human overrides, and audit logs
+- deterministic fraud tooling with registry-based parallel execution
+- LangGraph AI review workflow with structured decisions
+- persisted human-in-the-loop override workflow
+- lightweight learning-from-feedback evaluation harness with synthetic policy comparison experiments
+- backend test suite covering API, AI review, human override, audit, persistence, and evaluation behavior
 
 ## Project at a glance
 
@@ -140,7 +162,49 @@ Automated tests currently cover:
 
 The automated test suite avoids live OpenAI API calls by default. AI review behavior is tested with controlled mocked outputs so the suite can run reliably without provider credentials.
 
-The latest captured local full backend run shows `114 passed` tests, including `40 passed` tests for the evaluation harness and dedicated tests for persisted human override behavior.
+### Run backend tests
+
+From `backend/`:
+
+```powershell
+python -m pytest -q
+```
+
+### Run evaluation harness tests
+
+From `backend/`:
+
+```powershell
+python -m pytest tests\eval_harness -q
+```
+
+Latest evaluation harness result:
+
+```text
+47 passed, 1 warning
+```
+
+### Run evaluation experiments
+
+Single seeded run:
+
+```powershell
+python -m eval_harness.run_experiment --policy feedback_adjusted --episodes 50 --seed 42
+```
+
+Multi-seed policy comparison:
+
+```powershell
+python -m eval_harness.run_multi_seed_experiment --episodes 50 --seeds 1 7 21 42 100
+```
+
+Evaluation outputs are written to:
+
+```text
+backend/experiments/runs/
+```
+
+The latest captured local full backend run shows `121 passed, 1 warning`, including `47 passed` tests for the evaluation harness and dedicated tests for persisted human override behavior.
 
 ---
 
@@ -156,17 +220,13 @@ This is **not** intended to be a frontier reinforcement learning system. The dat
 
 Current harness components include:
 
-- synthetic JSONL evaluation dataset
-- environment/state/action/reward abstraction
-- deterministic reward function with asymmetric fraud-review costs
-- baseline rules policy
-- AI-review policy interface with offline deterministic fallback
-- feedback-adjusted threshold policy
 - seeded experiment runner
+- multi-seed aggregate experiment runner
 - JSON and CSV experiment outputs
+- aggregate policy metrics across deterministic seeds
 - metrics for accuracy, average reward, false approvals, false rejections, escalation rate, and decision distribution
-- experiment report with assumptions, results, limitations, and next steps
-- pytest coverage for schemas, dataset loading, environment behavior, reward calculation, policy outputs, feedback updates, metrics, and experiment reproducibility
+- experiment report with assumptions, results, limitations, trade-offs, and next steps
+- pytest coverage for schemas, dataset loading, environment behavior, reward calculation, policy outputs, feedback updates, metrics, experiment reproducibility, and the multi-seed runner
 
 Example seeded run results are documented in `backend/experiments/README.md`.
 
@@ -189,6 +249,34 @@ On this small synthetic seeded run, the feedback-adjusted policy improved averag
 
 The AI-review fallback matched the rules baseline in this run because it used deterministic offline fallback logic rather than live model calls or saved AI review outputs. This keeps the experiment reproducible and avoids requiring external provider credentials during evaluation.
 
+### Multi-seed policy comparison
+
+The evaluation harness now also includes a multi-seed aggregate policy comparison.
+
+This run evaluates each policy across five deterministic seeds:
+
+- episodes per seed: `50`
+- seeds: `1`, `7`, `21`, `42`, `100`
+- total evaluated cases per policy: `250`
+- output JSON: `backend/experiments/runs/2026-05-16-123246-multi-seed-policy-comparison.json`
+- output CSV: `backend/experiments/runs/2026-05-16-123246-multi-seed-policy-comparison.csv`
+
+| Policy | Accuracy mean | Accuracy std | Avg reward mean | Avg reward std | False approve rate | False reject rate | Escalation rate | Failures | Cases |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Rules baseline | `0.892` | `0.035` | `0.744` | `0.048` | `0.000` | `0.108` | `0.188` | `0` | `250` |
+| AI-review fallback | `0.892` | `0.035` | `0.744` | `0.048` | `0.000` | `0.108` | `0.188` | `0` | `250` |
+| Feedback-adjusted | `0.980` | `0.000` | `0.832` | `0.023` | `0.000` | `0.020` | `0.276` | `0` | `250` |
+
+Across five deterministic seeds and 250 synthetic evaluations per policy, the feedback-adjusted threshold policy improved accuracy and average reward while reducing false rejects. This came with a higher escalation rate, which is a reasonable trade-off in a fraud-review setting where uncertain cases may be routed to human review instead of being approved or rejected automatically.
+
+Run the multi-seed comparison from `backend/`:
+
+```powershell
+python -m eval_harness.run_multi_seed_experiment --episodes 50 --seeds 1 7 21 42 100
+```
+
+The full evaluation report is documented in `backend/experiments/README.md`.
+
 ---
 
 ## Demo evidence
@@ -199,7 +287,7 @@ The repository includes screenshot evidence for automated tests, frontend workfl
 
 Pytest coverage for API endpoints, schema validation, deterministic tool execution, mocked AI review workflows, latest persisted-state retrieval, decision scenarios, and AI review persistence/audit behavior.
 
-![Backend pytest suite](images/testing/pytest-backend-114-passed.png)
+![Backend pytest suite](images/testing/pytest-backend-121-passed.png)
 
 ### Frontend analyst workflow
 
@@ -404,20 +492,19 @@ The frontend should be available at:
 
 ### **Frontend local environment**
 
-Set the following local frontend environment variable:
+Create a local frontend environment file at:
 
+```text
+frontend/frontend/.env.local
 ```
+
+Add:
+
+```bash
 NEXT_PUBLIC_API_BASE_URL=http://localhost:8000
 ```
 
-to:
-
-```md
-Place it in:
-
-```bash
-frontend/frontend/.env.local
-```
+This points the Next.js frontend at the local FastAPI backend.
 
 ### **Local CORS note**
 
@@ -522,12 +609,13 @@ This keeps local development flexible while avoiding wildcard CORS as the defaul
 - [x] AI-review policy interface with offline deterministic fallback
 - [x] Feedback-adjusted policy
 - [x] Seeded experiment runner
+- [x] Multi-seed aggregate experiment runner
 - [x] JSON and CSV experiment outputs
+- [x] Multi-seed aggregate JSON/CSV report
 - [x] Metrics for accuracy, average reward, false approvals, false rejections, escalation rate, and decision distribution
 - [x] Experiment report and failure analysis
-- [x] Pytest coverage for schemas, environment, reward function, policies, metrics, and experiment runner
+- [x] Pytest coverage for schemas, environment, reward function, policies, metrics, experiment runner, and multi-seed runner
 - [ ] Larger synthetic scenario set
-- [ ] Multi-seed aggregate experiment report
 - [ ] Expanded benchmarking and coverage analysis
 
 ### **8) Production-minded polish**
@@ -562,12 +650,12 @@ Completed:
 - Next.js analyst dashboard with case queue, case detail, tool results, AI review, audit timeline, and persisted human override panel
 - pytest coverage for API contracts, schema validation, deterministic tooling, mocked AI review workflows, persistence, human override behavior, audit behavior, and evaluation harness behavior
 - screenshot evidence for tests, API responses, database tables, frontend workflows, and persisted human override behavior
-- lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, baseline/AI-review/feedback-adjusted policies, seeded experiment outputs, and pytest coverage
+- lightweight learning-from-feedback evaluation harness with synthetic cases, reward scoring, baseline/AI-review/feedback-adjusted policies, seeded and multi-seed experiment outputs, aggregate policy metrics, JSON/CSV reports, and pytest coverage
 - local reproducibility improvements including Docker Compose PostgreSQL setup, backend/frontend environment examples, and test database configuration
 
 In progress / planned:
 
-- larger synthetic evaluation scenarios and multi-seed experiment reporting
+- larger synthetic evaluation scenarios and expanded benchmarking coverage
 - human override UX refinements and optional reviewer identity metadata
 - tighter frontend/backend response-shape alignment
 - onboarding documentation polish
@@ -734,3 +822,4 @@ The next major improvements are likely to include:
 - deployment and portfolio packaging
 
 This project is intended to bring together backend engineering, applied AI systems design, realistic internal-tool product thinking, human-in-the-loop decisioning, and early learning-from-feedback evaluation in a single end-to-end workflow.
+

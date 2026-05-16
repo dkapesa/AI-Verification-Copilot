@@ -14,6 +14,10 @@ from app.api.v1.schemas.case import (
     CaseListResponse,
     CaseRead,
 )
+from app.api.v1.schemas.human_override import (
+    HumanOverrideCreate,
+    HumanOverrideRead,
+)
 from app.api.v1.schemas.tools import (
     RunToolsRequest,
     RunToolsResponse,
@@ -32,6 +36,10 @@ from app.crud.tool_runs import (
     create_tool_run,
     finalize_tool_run,
     get_latest_tool_runs_for_case,
+)
+from app.crud.human_override import (
+    create_human_override,
+    get_latest_human_override_for_case,
 )
 from app.db.deps import get_db
 from app.services.tool_runner import run_tools_parallel
@@ -343,14 +351,60 @@ def get_latest_ai_review(
     )
 
 
-@router.post("/{case_id}/human-override")
-def human_override_stub(
+@router.post("/{case_id}/human-override", response_model=HumanOverrideRead)
+def create_human_override_endpoint(
     case_id: UUID,
+    payload: HumanOverrideCreate,
     db: Session = Depends(get_db),
-) -> dict[str, str]:
+) -> HumanOverrideRead:
+    t0 = perf_counter()
+
     case = get_case(db, case_id)
 
     if not case:
         raise HTTPException(status_code=404, detail="Case not found")
 
-    return {"message": "Human override stub"}
+    latest_ai_review = get_latest_ai_review_for_case(db, case_id)
+    original_ai_decision = latest_ai_review.decision if latest_ai_review else None
+
+    override = create_human_override(
+        db=db,
+        case_id=case.id,
+        payload=payload,
+        original_ai_decision=original_ai_decision,
+    )
+
+    write_audit_log(
+        db=db,
+        event_type=AuditEvent.HUMAN_OVERRIDE_CREATED,
+        actor_type=ActorType.HUMAN,
+        case_id=case.id,
+        subject="human_override",
+        latency_ms=int((perf_counter() - t0) * 1000),
+        metadata={
+            "override_id": str(override.id),
+            "decision": override.decision,
+            "reason_length": len(override.reason),
+            "original_ai_decision": override.original_ai_decision,
+        },
+    )
+
+    return override
+
+
+@router.get("/{case_id}/human-overrides/latest", response_model=HumanOverrideRead)
+def get_latest_human_override(
+    case_id: UUID,
+    db: Session = Depends(get_db),
+) -> HumanOverrideRead:
+    case = get_case(db, case_id)
+
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+
+    override = get_latest_human_override_for_case(db, case_id)
+
+    if not override:
+        raise HTTPException(status_code=404, detail="No human override found for case")
+
+    return override

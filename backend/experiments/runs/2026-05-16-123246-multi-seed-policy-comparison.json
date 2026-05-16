@@ -1,0 +1,591 @@
+{
+  "aggregate_metrics": {
+    "ai_review": {
+      "accuracy_mean": 0.892,
+      "accuracy_std": 0.03487119154832542,
+      "average_reward_mean": 0.744,
+      "average_reward_std": 0.047581509013481287,
+      "decision_distribution_summary": {
+        "mean_rate": {
+          "APPROVE": 0.4,
+          "ESCALATE": 0.188,
+          "REJECT": 0.412
+        },
+        "total": {
+          "APPROVE": 100,
+          "ESCALATE": 47,
+          "REJECT": 103
+        }
+      },
+      "escalation_rate_mean": 0.188,
+      "escalation_rate_std": 0.048332183894378294,
+      "failure_count_total": 0,
+      "false_approve_rate_mean": 0.0,
+      "false_approve_rate_std": 0.0,
+      "false_reject_rate_mean": 0.108,
+      "false_reject_rate_std": 0.03487119154832539,
+      "run_count": 5,
+      "total_evaluated_cases": 250
+    },
+    "feedback_adjusted": {
+      "accuracy_mean": 0.98,
+      "accuracy_std": 0.0,
+      "average_reward_mean": 0.832,
+      "average_reward_std": 0.02315167380558042,
+      "decision_distribution_summary": {
+        "mean_rate": {
+          "APPROVE": 0.4,
+          "ESCALATE": 0.276,
+          "REJECT": 0.324
+        },
+        "total": {
+          "APPROVE": 100,
+          "ESCALATE": 69,
+          "REJECT": 81
+        }
+      },
+      "escalation_rate_mean": 0.276,
+      "escalation_rate_std": 0.04630334761116091,
+      "failure_count_total": 0,
+      "false_approve_rate_mean": 0.0,
+      "false_approve_rate_std": 0.0,
+      "false_reject_rate_mean": 0.02,
+      "false_reject_rate_std": 0.0,
+      "run_count": 5,
+      "total_evaluated_cases": 250
+    },
+    "rules": {
+      "accuracy_mean": 0.892,
+      "accuracy_std": 0.03487119154832542,
+      "average_reward_mean": 0.744,
+      "average_reward_std": 0.047581509013481287,
+      "decision_distribution_summary": {
+        "mean_rate": {
+          "APPROVE": 0.4,
+          "ESCALATE": 0.188,
+          "REJECT": 0.412
+        },
+        "total": {
+          "APPROVE": 100,
+          "ESCALATE": 47,
+          "REJECT": 103
+        }
+      },
+      "escalation_rate_mean": 0.188,
+      "escalation_rate_std": 0.048332183894378294,
+      "failure_count_total": 0,
+      "false_approve_rate_mean": 0.0,
+      "false_approve_rate_std": 0.0,
+      "false_reject_rate_mean": 0.108,
+      "false_reject_rate_std": 0.03487119154832539,
+      "run_count": 5,
+      "total_evaluated_cases": 250
+    }
+  },
+  "dataset": "synthetic_cases.jsonl",
+  "dataset_path": "C:\\Users\\dkape\\ai-verification-copilot\\backend\\eval_harness\\data\\synthetic_cases.jsonl",
+  "episodes_per_seed": 50,
+  "experiment_type": "multi_seed_policy_comparison",
+  "generated_at": "2026-05-16T12:32:46.171239+00:00",
+  "limitations": [
+    "Synthetic dataset only.",
+    "No real fraud labels are used.",
+    "Feedback-adjusted policy uses simple threshold updates, not a trained reinforcement learning agent.",
+    "AI-review fallback is deterministic for offline reproducible evaluation unless connected to saved or live AI outputs.",
+    "Metrics measure synthetic decision behaviour only and should not be interpreted as production fraud-model performance."
+  ],
+  "output_files": {
+    "csv": "experiments\\runs\\2026-05-16-123246-multi-seed-policy-comparison.csv",
+    "json": "experiments\\runs\\2026-05-16-123246-multi-seed-policy-comparison.json"
+  },
+  "policies": [
+    "rules",
+    "ai_review",
+    "feedback_adjusted"
+  ],
+  "runs": [
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.92,
+        "average_reward": 0.74,
+        "correct_count": 46,
+        "decision_distribution": {
+          "APPROVE": 23,
+          "ESCALATE": 14,
+          "REJECT": 13
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.46,
+          "ESCALATE": 0.28,
+          "REJECT": 0.26
+        },
+        "escalation_count": 14,
+        "escalation_rate": 0.28,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 4,
+        "false_reject_rate": 0.08,
+        "runtime_seconds": 0.00034840000444091856,
+        "total_cases": 50
+      },
+      "policy": "rules",
+      "seed": 1
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.84,
+        "average_reward": 0.67,
+        "correct_count": 42,
+        "decision_distribution": {
+          "APPROVE": 21,
+          "ESCALATE": 9,
+          "REJECT": 20
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.42,
+          "ESCALATE": 0.18,
+          "REJECT": 0.4
+        },
+        "escalation_count": 9,
+        "escalation_rate": 0.18,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 8,
+        "false_reject_rate": 0.16,
+        "runtime_seconds": 0.0002668000233825296,
+        "total_cases": 50
+      },
+      "policy": "rules",
+      "seed": 7
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.92,
+        "average_reward": 0.8,
+        "correct_count": 46,
+        "decision_distribution": {
+          "APPROVE": 18,
+          "ESCALATE": 8,
+          "REJECT": 24
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.36,
+          "ESCALATE": 0.16,
+          "REJECT": 0.48
+        },
+        "escalation_count": 8,
+        "escalation_rate": 0.16,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 4,
+        "false_reject_rate": 0.08,
+        "runtime_seconds": 0.00025850001838989556,
+        "total_cases": 50
+      },
+      "policy": "rules",
+      "seed": 21
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.86,
+        "average_reward": 0.72,
+        "correct_count": 43,
+        "decision_distribution": {
+          "APPROVE": 19,
+          "ESCALATE": 7,
+          "REJECT": 24
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.38,
+          "ESCALATE": 0.14,
+          "REJECT": 0.48
+        },
+        "escalation_count": 7,
+        "escalation_rate": 0.14,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 7,
+        "false_reject_rate": 0.14,
+        "runtime_seconds": 0.0002523000002838671,
+        "total_cases": 50
+      },
+      "policy": "rules",
+      "seed": 42
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.92,
+        "average_reward": 0.79,
+        "correct_count": 46,
+        "decision_distribution": {
+          "APPROVE": 19,
+          "ESCALATE": 9,
+          "REJECT": 22
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.38,
+          "ESCALATE": 0.18,
+          "REJECT": 0.44
+        },
+        "escalation_count": 9,
+        "escalation_rate": 0.18,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 4,
+        "false_reject_rate": 0.08,
+        "runtime_seconds": 0.00024560000747442245,
+        "total_cases": 50
+      },
+      "policy": "rules",
+      "seed": 100
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.92,
+        "average_reward": 0.74,
+        "correct_count": 46,
+        "decision_distribution": {
+          "APPROVE": 23,
+          "ESCALATE": 14,
+          "REJECT": 13
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.46,
+          "ESCALATE": 0.28,
+          "REJECT": 0.26
+        },
+        "escalation_count": 14,
+        "escalation_rate": 0.28,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 4,
+        "false_reject_rate": 0.08,
+        "runtime_seconds": 0.00024900000425986946,
+        "total_cases": 50
+      },
+      "policy": "ai_review",
+      "seed": 1
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.84,
+        "average_reward": 0.67,
+        "correct_count": 42,
+        "decision_distribution": {
+          "APPROVE": 21,
+          "ESCALATE": 9,
+          "REJECT": 20
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.42,
+          "ESCALATE": 0.18,
+          "REJECT": 0.4
+        },
+        "escalation_count": 9,
+        "escalation_rate": 0.18,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 8,
+        "false_reject_rate": 0.16,
+        "runtime_seconds": 0.00026729999808594584,
+        "total_cases": 50
+      },
+      "policy": "ai_review",
+      "seed": 7
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.92,
+        "average_reward": 0.8,
+        "correct_count": 46,
+        "decision_distribution": {
+          "APPROVE": 18,
+          "ESCALATE": 8,
+          "REJECT": 24
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.36,
+          "ESCALATE": 0.16,
+          "REJECT": 0.48
+        },
+        "escalation_count": 8,
+        "escalation_rate": 0.16,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 4,
+        "false_reject_rate": 0.08,
+        "runtime_seconds": 0.0002581999870017171,
+        "total_cases": 50
+      },
+      "policy": "ai_review",
+      "seed": 21
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.86,
+        "average_reward": 0.72,
+        "correct_count": 43,
+        "decision_distribution": {
+          "APPROVE": 19,
+          "ESCALATE": 7,
+          "REJECT": 24
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.38,
+          "ESCALATE": 0.14,
+          "REJECT": 0.48
+        },
+        "escalation_count": 7,
+        "escalation_rate": 0.14,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 7,
+        "false_reject_rate": 0.14,
+        "runtime_seconds": 0.00025949999690055847,
+        "total_cases": 50
+      },
+      "policy": "ai_review",
+      "seed": 42
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": null,
+      "metrics": {
+        "accuracy": 0.92,
+        "average_reward": 0.79,
+        "correct_count": 46,
+        "decision_distribution": {
+          "APPROVE": 19,
+          "ESCALATE": 9,
+          "REJECT": 22
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.38,
+          "ESCALATE": 0.18,
+          "REJECT": 0.44
+        },
+        "escalation_count": 9,
+        "escalation_rate": 0.18,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 4,
+        "false_reject_rate": 0.08,
+        "runtime_seconds": 0.0002702999918255955,
+        "total_cases": 50
+      },
+      "policy": "ai_review",
+      "seed": 100
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": {
+        "approve_threshold": 0.45,
+        "history_length": 50,
+        "learning_rate": 0.05,
+        "reject_threshold": 0.8300000000000001
+      },
+      "metrics": {
+        "accuracy": 0.98,
+        "average_reward": 0.8,
+        "correct_count": 49,
+        "decision_distribution": {
+          "APPROVE": 23,
+          "ESCALATE": 17,
+          "REJECT": 10
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.46,
+          "ESCALATE": 0.34,
+          "REJECT": 0.2
+        },
+        "escalation_count": 17,
+        "escalation_rate": 0.34,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 1,
+        "false_reject_rate": 0.02,
+        "runtime_seconds": 0.0002961000136565417,
+        "total_cases": 50
+      },
+      "policy": "feedback_adjusted",
+      "seed": 1
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": {
+        "approve_threshold": 0.45,
+        "history_length": 50,
+        "learning_rate": 0.05,
+        "reject_threshold": 0.8300000000000001
+      },
+      "metrics": {
+        "accuracy": 0.98,
+        "average_reward": 0.81,
+        "correct_count": 49,
+        "decision_distribution": {
+          "APPROVE": 21,
+          "ESCALATE": 16,
+          "REJECT": 13
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.42,
+          "ESCALATE": 0.32,
+          "REJECT": 0.26
+        },
+        "escalation_count": 16,
+        "escalation_rate": 0.32,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 1,
+        "false_reject_rate": 0.02,
+        "runtime_seconds": 0.0002896999940276146,
+        "total_cases": 50
+      },
+      "policy": "feedback_adjusted",
+      "seed": 7
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": {
+        "approve_threshold": 0.45,
+        "history_length": 50,
+        "learning_rate": 0.05,
+        "reject_threshold": 0.8300000000000001
+      },
+      "metrics": {
+        "accuracy": 0.98,
+        "average_reward": 0.86,
+        "correct_count": 49,
+        "decision_distribution": {
+          "APPROVE": 18,
+          "ESCALATE": 11,
+          "REJECT": 21
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.36,
+          "ESCALATE": 0.22,
+          "REJECT": 0.42
+        },
+        "escalation_count": 11,
+        "escalation_rate": 0.22,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 1,
+        "false_reject_rate": 0.02,
+        "runtime_seconds": 0.00039250002009794116,
+        "total_cases": 50
+      },
+      "policy": "feedback_adjusted",
+      "seed": 21
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": {
+        "approve_threshold": 0.45,
+        "history_length": 50,
+        "learning_rate": 0.05,
+        "reject_threshold": 0.8300000000000001
+      },
+      "metrics": {
+        "accuracy": 0.98,
+        "average_reward": 0.84,
+        "correct_count": 49,
+        "decision_distribution": {
+          "APPROVE": 19,
+          "ESCALATE": 13,
+          "REJECT": 18
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.38,
+          "ESCALATE": 0.26,
+          "REJECT": 0.36
+        },
+        "escalation_count": 13,
+        "escalation_rate": 0.26,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 1,
+        "false_reject_rate": 0.02,
+        "runtime_seconds": 0.0003015999973285943,
+        "total_cases": 50
+      },
+      "policy": "feedback_adjusted",
+      "seed": 42
+    },
+    {
+      "episodes": 50,
+      "feedback_policy_state": {
+        "approve_threshold": 0.45,
+        "history_length": 50,
+        "learning_rate": 0.05,
+        "reject_threshold": 0.8300000000000001
+      },
+      "metrics": {
+        "accuracy": 0.98,
+        "average_reward": 0.85,
+        "correct_count": 49,
+        "decision_distribution": {
+          "APPROVE": 19,
+          "ESCALATE": 12,
+          "REJECT": 19
+        },
+        "decision_distribution_rate": {
+          "APPROVE": 0.38,
+          "ESCALATE": 0.24,
+          "REJECT": 0.38
+        },
+        "escalation_count": 12,
+        "escalation_rate": 0.24,
+        "failure_count": 0,
+        "false_approve_count": 0,
+        "false_approve_rate": 0.0,
+        "false_reject_count": 1,
+        "false_reject_rate": 0.02,
+        "runtime_seconds": 0.00029000002541579306,
+        "total_cases": 50
+      },
+      "policy": "feedback_adjusted",
+      "seed": 100
+    }
+  ],
+  "runtime_seconds": 0.009503200009930879,
+  "seeds": [
+    1,
+    7,
+    21,
+    42,
+    100
+  ]
+}
