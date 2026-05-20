@@ -1,0 +1,486 @@
+{
+  "dataset_path": "C:\\Users\\dkape\\AI-Verification-Copilot-github\\backend\\eval_harness\\data\\synthetic_cases.jsonl",
+  "decision_records": [
+    {
+      "case_id": "case_001",
+      "correct": true,
+      "decision": "APPROVE",
+      "expected_decision": "APPROVE",
+      "metadata": {
+        "action": "APPROVE",
+        "customer_harm_risk": "low",
+        "expected_decision": "APPROVE",
+        "fixture_expected_decision": "APPROVE",
+        "fraud_confirmed": false,
+        "manual_review_needed": false,
+        "reward_reason": "correct_decision",
+        "saved_review_confidence": 0.91,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "low",
+        "fraud_confirmed": false,
+        "manual_review_needed": false
+      },
+      "reward": 1.0,
+      "row": 1,
+      "saved_review_confidence": 0.91,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_002",
+      "correct": true,
+      "decision": "ESCALATE",
+      "expected_decision": "ESCALATE",
+      "metadata": {
+        "action": "ESCALATE",
+        "customer_harm_risk": "medium",
+        "expected_decision": "ESCALATE",
+        "fixture_expected_decision": "ESCALATE",
+        "fraud_confirmed": false,
+        "manual_review_needed": true,
+        "reward_reason": "appropriate_escalation",
+        "saved_review_confidence": 0.88,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "medium",
+        "fraud_confirmed": false,
+        "manual_review_needed": true
+      },
+      "reward": 0.5,
+      "row": 2,
+      "saved_review_confidence": 0.88,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_003",
+      "correct": false,
+      "decision": "APPROVE",
+      "expected_decision": "REJECT",
+      "metadata": {
+        "action": "APPROVE",
+        "customer_harm_risk": "high",
+        "expected_decision": "REJECT",
+        "fixture_expected_decision": "REJECT",
+        "fraud_confirmed": true,
+        "manual_review_needed": false,
+        "reward_reason": "false_approve_confirmed_fraud",
+        "saved_review_confidence": 0.85,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "high",
+        "fraud_confirmed": true,
+        "manual_review_needed": false
+      },
+      "reward": -2.0,
+      "row": 3,
+      "saved_review_confidence": 0.85,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_004",
+      "correct": true,
+      "decision": "APPROVE",
+      "expected_decision": "APPROVE",
+      "metadata": {
+        "action": "APPROVE",
+        "customer_harm_risk": "low",
+        "expected_decision": "APPROVE",
+        "fixture_expected_decision": "APPROVE",
+        "fraud_confirmed": false,
+        "manual_review_needed": false,
+        "reward_reason": "correct_decision",
+        "saved_review_confidence": 0.82,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "low",
+        "fraud_confirmed": false,
+        "manual_review_needed": false
+      },
+      "reward": 1.0,
+      "row": 4,
+      "saved_review_confidence": 0.82,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_005",
+      "correct": false,
+      "decision": "REJECT",
+      "expected_decision": "ESCALATE",
+      "metadata": {
+        "action": "REJECT",
+        "customer_harm_risk": "medium",
+        "expected_decision": "ESCALATE",
+        "fixture_expected_decision": "ESCALATE",
+        "fraud_confirmed": false,
+        "manual_review_needed": true,
+        "reward_reason": "rejected_uncertain_case",
+        "saved_review_confidence": 0.79,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "medium",
+        "fraud_confirmed": false,
+        "manual_review_needed": true
+      },
+      "reward": -0.5,
+      "row": 5,
+      "saved_review_confidence": 0.79,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_006",
+      "correct": true,
+      "decision": "REJECT",
+      "expected_decision": "REJECT",
+      "metadata": {
+        "action": "REJECT",
+        "customer_harm_risk": "high",
+        "expected_decision": "REJECT",
+        "fixture_expected_decision": "REJECT",
+        "fraud_confirmed": true,
+        "manual_review_needed": false,
+        "reward_reason": "correct_decision",
+        "saved_review_confidence": 0.76,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "high",
+        "fraud_confirmed": true,
+        "manual_review_needed": false
+      },
+      "reward": 1.0,
+      "row": 6,
+      "saved_review_confidence": 0.76,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_007",
+      "correct": false,
+      "decision": "ESCALATE",
+      "expected_decision": "APPROVE",
+      "metadata": {
+        "action": "ESCALATE",
+        "customer_harm_risk": "low",
+        "expected_decision": "APPROVE",
+        "fixture_expected_decision": "APPROVE",
+        "fraud_confirmed": false,
+        "manual_review_needed": false,
+        "reward_reason": "unnecessary_escalation",
+        "saved_review_confidence": 0.73,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "low",
+        "fraud_confirmed": false,
+        "manual_review_needed": false
+      },
+      "reward": -0.3,
+      "row": 7,
+      "saved_review_confidence": 0.73,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_008",
+      "correct": false,
+      "decision": "APPROVE",
+      "expected_decision": "ESCALATE",
+      "metadata": {
+        "action": "APPROVE",
+        "customer_harm_risk": "medium",
+        "expected_decision": "ESCALATE",
+        "fixture_expected_decision": "ESCALATE",
+        "fraud_confirmed": false,
+        "manual_review_needed": true,
+        "reward_reason": "approved_case_needing_manual_review",
+        "saved_review_confidence": 0.7,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "medium",
+        "fraud_confirmed": false,
+        "manual_review_needed": true
+      },
+      "reward": -0.8,
+      "row": 8,
+      "saved_review_confidence": 0.7,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_009",
+      "correct": true,
+      "decision": "REJECT",
+      "expected_decision": "REJECT",
+      "metadata": {
+        "action": "REJECT",
+        "customer_harm_risk": "high",
+        "expected_decision": "REJECT",
+        "fixture_expected_decision": "REJECT",
+        "fraud_confirmed": true,
+        "manual_review_needed": false,
+        "reward_reason": "correct_decision",
+        "saved_review_confidence": 0.67,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "high",
+        "fraud_confirmed": true,
+        "manual_review_needed": false
+      },
+      "reward": 1.0,
+      "row": 9,
+      "saved_review_confidence": 0.67,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_010",
+      "correct": false,
+      "decision": "REJECT",
+      "expected_decision": "ESCALATE",
+      "metadata": {
+        "action": "REJECT",
+        "customer_harm_risk": "medium",
+        "expected_decision": "ESCALATE",
+        "fixture_expected_decision": "ESCALATE",
+        "fraud_confirmed": false,
+        "manual_review_needed": true,
+        "reward_reason": "rejected_uncertain_case",
+        "saved_review_confidence": 0.64,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "medium",
+        "fraud_confirmed": false,
+        "manual_review_needed": true
+      },
+      "reward": -0.5,
+      "row": 10,
+      "saved_review_confidence": 0.64,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_011",
+      "correct": true,
+      "decision": "APPROVE",
+      "expected_decision": "APPROVE",
+      "metadata": {
+        "action": "APPROVE",
+        "customer_harm_risk": "low",
+        "expected_decision": "APPROVE",
+        "fixture_expected_decision": "APPROVE",
+        "fraud_confirmed": false,
+        "manual_review_needed": false,
+        "reward_reason": "correct_decision",
+        "saved_review_confidence": 0.61,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "low",
+        "fraud_confirmed": false,
+        "manual_review_needed": false
+      },
+      "reward": 1.0,
+      "row": 11,
+      "saved_review_confidence": 0.61,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    },
+    {
+      "case_id": "case_012",
+      "correct": true,
+      "decision": "REJECT",
+      "expected_decision": "REJECT",
+      "metadata": {
+        "action": "REJECT",
+        "customer_harm_risk": "high",
+        "expected_decision": "REJECT",
+        "fixture_expected_decision": "REJECT",
+        "fraud_confirmed": true,
+        "manual_review_needed": false,
+        "reward_reason": "correct_decision",
+        "saved_review_confidence": 0.58,
+        "saved_review_metadata": {
+          "fixture_version": "v1",
+          "notes": "No live model call was used to create this evaluation fixture.",
+          "source": "synthetic_saved_ai_review_fixture"
+        },
+        "saved_review_reasons": [
+          "Offline saved structured AI review example.",
+          "Synthetic fixture used for reproducible decision-quality evaluation."
+        ]
+      },
+      "outcome": {
+        "customer_harm_risk": "high",
+        "fraud_confirmed": true,
+        "manual_review_needed": false
+      },
+      "reward": 1.0,
+      "row": 12,
+      "saved_review_confidence": 0.58,
+      "saved_review_reasons": [
+        "Offline saved structured AI review example.",
+        "Synthetic fixture used for reproducible decision-quality evaluation."
+      ]
+    }
+  ],
+  "experiment_type": "saved_ai_review_output_evaluation",
+  "generated_at": "2026-05-20T09:53:49.484655+00:00",
+  "input_path": "experiments\\saved_ai_review_examples.jsonl",
+  "limitations": [
+    "Synthetic expected outcomes only.",
+    "No real fraud labels are used.",
+    "Saved AI review decisions are evaluated offline without live model calls.",
+    "Metrics describe saved structured decision behaviour only and should not be interpreted as production fraud-model performance."
+  ],
+  "metrics": {
+    "accuracy": 0.5833333333333334,
+    "average_reward": 0.19999999999999998,
+    "correct_count": 7,
+    "decision_distribution": {
+      "APPROVE": 5,
+      "ESCALATE": 2,
+      "REJECT": 5
+    },
+    "decision_distribution_rate": {
+      "APPROVE": 0.4166666666666667,
+      "ESCALATE": 0.16666666666666666,
+      "REJECT": 0.4166666666666667
+    },
+    "escalation_count": 2,
+    "escalation_rate": 0.16666666666666666,
+    "failure_count": 0,
+    "false_approve_count": 2,
+    "false_approve_rate": 0.16666666666666666,
+    "false_reject_count": 2,
+    "false_reject_rate": 0.16666666666666666,
+    "runtime_seconds": 0.0002829000586643815,
+    "total_cases": 12
+  },
+  "output_files": {
+    "csv": "experiments\\runs\\2026-05-20-095349-saved-ai-review-evaluation.csv",
+    "json": "experiments\\runs\\2026-05-20-095349-saved-ai-review-evaluation.json"
+  }
+}

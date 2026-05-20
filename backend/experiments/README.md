@@ -119,6 +119,88 @@ The feedback-adjusted policy produced fewer rejections and more escalations than
 
 ---
 
+## Saved AI review output evaluation
+
+The harness also supports an offline saved-AI-review evaluation path.
+
+This evaluates previously saved structured AI review outputs against the synthetic expected outcomes in the evaluation dataset. It does **not** call OpenAI, Ollama, LangGraph, or any live model provider. The goal is to inspect saved AI review decisions in a reproducible way without depending on live model calls.
+
+The saved review fixture is stored at:
+
+```text
+backend/experiments/saved_ai_review_examples.jsonl
+```
+
+Each saved review record contains:
+
+- synthetic case ID
+- expected decision
+- saved AI review decision
+- confidence
+- reasons
+- metadata
+
+The evaluator maps each saved AI decision to the existing environment action space:
+
+- `APPROVE`
+- `ESCALATE`
+- `REJECT`
+
+It then reuses the existing reward and metrics logic to report:
+
+- accuracy
+- average reward
+- false approve count and rate
+- false reject count and rate
+- escalation count and rate
+- decision distribution
+- failure count
+
+Latest saved-AI-review evaluation run:
+
+- input fixture: `backend/experiments/saved_ai_review_examples.jsonl`
+- total saved reviews evaluated: `12`
+- accuracy: `0.583`
+- average reward: `0.200`
+- false approve rate: `0.167`
+- false reject rate: `0.167`
+- escalation rate: `0.167`
+- failures: `0`
+- output JSON: `backend/experiments/runs/2026-05-20-095349-saved-ai-review-evaluation.json`
+- output CSV: `backend/experiments/runs/2026-05-20-095349-saved-ai-review-evaluation.csv`
+
+This result is intentionally not presented as production model quality. It is a small offline evaluation path for synthetic saved decisions, useful for checking whether structured AI review outputs produce safe and expected decisions under a known synthetic dataset.
+
+### How to run saved AI review evaluation
+
+From the backend directory:
+
+```powershell
+cd C:\Users\dkape\AI-Verification-Copilot-github\backend
+
+python -m eval_harness.run_saved_ai_review_evaluation --input experiments\saved_ai_review_examples.jsonl
+```
+
+If `python` is not available on PATH, use the local backend virtual environment:
+
+```powershell
+& C:\Users\dkape\ai-verification-copilot\backend\.venv\Scripts\python.exe -m eval_harness.run_saved_ai_review_evaluation --input experiments\saved_ai_review_examples.jsonl
+```
+
+The runner writes one JSON summary and one CSV decision record file to:
+
+```text
+backend/experiments/runs/
+```
+
+Limitations:
+
+- Synthetic expected outcomes only.
+- No real fraud labels are used.
+- No live model calls are made.
+- Saved AI decisions are fixture records, not proof of production model performance.
+- Metrics describe synthetic decision behaviour only.
+
 ## How to run the experiments
 
 From the backend directory:

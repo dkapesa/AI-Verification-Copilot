@@ -1,0 +1,13 @@
+row,case_id,decision,expected_decision,reward,correct,reward_reason,saved_review_confidence,saved_review_reasons,error
+1,case_001,APPROVE,APPROVE,1.0,True,correct_decision,0.91,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+2,case_002,ESCALATE,ESCALATE,0.5,True,appropriate_escalation,0.88,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+3,case_003,APPROVE,REJECT,-2.0,False,false_approve_confirmed_fraud,0.85,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+4,case_004,APPROVE,APPROVE,1.0,True,correct_decision,0.82,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+5,case_005,REJECT,ESCALATE,-0.5,False,rejected_uncertain_case,0.79,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+6,case_006,REJECT,REJECT,1.0,True,correct_decision,0.76,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+7,case_007,ESCALATE,APPROVE,-0.3,False,unnecessary_escalation,0.73,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+8,case_008,APPROVE,ESCALATE,-0.8,False,approved_case_needing_manual_review,0.7,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+9,case_009,REJECT,REJECT,1.0,True,correct_decision,0.67,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+10,case_010,REJECT,ESCALATE,-0.5,False,rejected_uncertain_case,0.64,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+11,case_011,APPROVE,APPROVE,1.0,True,correct_decision,0.61,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
+12,case_012,REJECT,REJECT,1.0,True,correct_decision,0.58,Offline saved structured AI review example. | Synthetic fixture used for reproducible decision-quality evaluation.,
